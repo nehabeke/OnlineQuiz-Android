@@ -1,0 +1,64 @@
+package edu.depaul.csc472.onlinequiz;
+
+/**
+ * Created by Neha on 11/6/2015.
+ */
+public class User {
+    private int _id;
+    private String _fname;
+    private String _lname;
+    private String _emailid;
+    private String _password;
+
+    public User() {
+
+    }
+
+    public User(int id, String fname, String lname, String emailid, String password) {
+        this._id = id;
+        this._fname = fname;
+        this._lname = lname;
+        this._emailid = emailid;
+        this._password = password;
+    }
+
+    public int getID() {
+        return this._id;
+    }
+
+    public void setID(int id) {
+        this._id = id;
+    }
+
+    public String getFname() {
+        return this._fname;
+    }
+
+    public void setFname(String fname) {
+        this._fname = fname;
+    }
+
+    public String getLname() {
+        return this._lname;
+    }
+
+    public void setLname(String lname) {
+        this._lname = lname;
+    }
+
+    public String getEmailid() {
+        return this._emailid;
+    }
+
+    public void setEmailid(String emailid) {
+        this._emailid = emailid;
+    }
+
+    public String getPassword() {
+        return this._emailid;
+    }
+
+    public void setPassword(String password) {
+        this._password = password;
+    }
+}
