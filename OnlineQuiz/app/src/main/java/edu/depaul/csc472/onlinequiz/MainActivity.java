@@ -7,8 +7,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 public class MainActivity extends Activity {
-//test
-    
     TextView idView;
     EditText productBox;
     EditText quantityBox;
