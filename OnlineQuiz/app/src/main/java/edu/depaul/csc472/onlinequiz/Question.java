@@ -1,7 +1,7 @@
 package edu.depaul.csc472.onlinequiz;
 
 /**
- * Created by Neha on 11/6/2015.
+ * Created by Akshu on 11/17/2015.
  */
 public class Question {
     private int _id;

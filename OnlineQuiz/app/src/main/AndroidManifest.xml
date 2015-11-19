@@ -16,6 +16,45 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".Adminchoice"
+            android:label="@string/title_activity_adminchoice" >
+        </activity>
+        <activity
+            android:name=".addQuestionActivity"
+            android:label="@string/title_activity_add_question" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".addUserActivity"
+            android:label="@string/title_activity_add_user" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".MyDBHandler"
+            android:label="@string/title_activity_my_dbhandler" >
+        </activity>
+        <activity
+            android:name=".DataBaseUser"
+            android:label="@string/title_activity_data_base_user" >
+        </activity>
+        <activity
+            android:name=".registerUser"
+            android:label="@string/title_activity_register_user" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

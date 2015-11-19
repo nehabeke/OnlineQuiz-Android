@@ -1,68 +1,61 @@
 package edu.depaul.csc472.onlinequiz;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends Activity {
-    TextView idView;
-    EditText productBox;
-    EditText quantityBox;
+
+    EditText PasswordEditText,userNameEditText;
+    Button buttonLogin;
+    TextView register;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_database);
+        setContentView(R.layout.activity_main);
 
-        idView = (TextView) findViewById(R.id.productID);
-        productBox = (EditText) findViewById(R.id.productName);
-        quantityBox = (EditText) findViewById(R.id.productQuantity);
+       PasswordEditText=( EditText ) findViewById(R.id.PasswordEditText);
+       userNameEditText=( EditText ) findViewById(R.id. userNameEditText);
+       buttonLogin=(  Button) findViewById(R.id.buttonLogin);
+        register = (TextView)findViewById(R.id.register);
+
+
+        buttonLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (userNameEditText.getText().toString().equals("admin") &&
+                        PasswordEditText.getText().toString().equals("admin")) {
+                    Toast.makeText(getApplicationContext(), "Hello admin!", Toast.LENGTH_SHORT).show();
+                    Intent myIntent = new Intent(MainActivity.this, Adminchoice.class);
+                    startActivity(myIntent);
+
+                } else {
+
+                    Toast.makeText(getApplicationContext(), "Seems like you 're not admin!",Toast.LENGTH_SHORT).show();
+
+                }
+
+            }
+        });
+        register.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent myIntent = new Intent(MainActivity.this, registerUser.class);
+                startActivity(myIntent);
+
+            }
+        });
+
+
     }
 
-    public void newProduct (View view) {
-        MyDBHandler dbHandler = new MyDBHandler(this, null, null, 1);
 
-        int quantity =
-                Integer.parseInt(quantityBox.getText().toString());
 
-        Product product =
-                new Product(productBox.getText().toString(), quantity);
-
-        dbHandler.addProduct(product);
-        productBox.setText("");
-        quantityBox.setText("");
-    }
-
-    public void lookupProduct (View view) {
-        MyDBHandler dbHandler = new MyDBHandler(this, null, null, 1);
-
-        Product product =
-                dbHandler.findProduct(productBox.getText().toString());
-
-        if (product != null) {
-            idView.setText(String.valueOf(product.getID()));
-
-            quantityBox.setText(String.valueOf(product.getQuantity()));
-        } else {
-            idView.setText("No Match Found");
-        }
-    }
-
-    public void removeProduct (View view) {
-        MyDBHandler dbHandler = new MyDBHandler(this, null, null, 1);
-
-        boolean result = dbHandler.deleteProduct(
-                productBox.getText().toString());
-
-        if (result)
-        {
-            idView.setText("Record Deleted");
-            productBox.setText("");
-            quantityBox.setText("");
-        }
-        else
-            idView.setText("No Match Found");
-    }
 }

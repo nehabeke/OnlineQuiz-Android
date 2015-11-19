@@ -9,62 +9,39 @@ import android.widget.TextView;
  * Created by Neha on 11/5/2015.
  */
 public class DatabaseActivity extends Activity {
-    TextView idView;
-    EditText productBox;
-    EditText quantityBox;
+    EditText userId;
+    EditText userFName;
+    EditText userLName;
+    EditText emailId;
+    EditText passWord;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_database);
 
-        idView = (TextView) findViewById(R.id.productID);
-        productBox = (EditText) findViewById(R.id.productName);
-        quantityBox = (EditText) findViewById(R.id.productQuantity);
+
+        userId=(EditText)findViewById(R.id.userId);
+        userFName= (EditText) findViewById(R.id.userFName);
+        userLName= (EditText) findViewById(R.id.userLName);
+        emailId= (EditText) findViewById(R.id.emailId);
+        passWord= (EditText) findViewById(R.id.passWord);
     }
 
-    public void newProduct (View view) {
+    public void newUser(View view) {
         MyDBHandler dbHandler = new MyDBHandler(this, null, null, 1);
 
-        int quantity =
-                Integer.parseInt(quantityBox.getText().toString());
+        int uid =  Integer.parseInt(userId.getText().toString());
+        User user=  new User(uid,userFName.getText().toString(),userLName.getText().toString(),emailId.getText().toString(),passWord.getText().toString());
 
-        Product product =
-                new Product(productBox.getText().toString(), quantity);
+        dbHandler.addUser(user);
+        userId.setText("");
+        userFName.setText("");
+        userLName.setText("");
+        emailId.setText("");
+        passWord.setText("");
 
-        dbHandler.addProduct(product);
-        productBox.setText("");
-        quantityBox.setText("");
     }
 
-    public void lookupProduct (View view) {
-        MyDBHandler dbHandler = new MyDBHandler(this, null, null, 1);
 
-        Product product =
-                dbHandler.findProduct(productBox.getText().toString());
-
-        if (product != null) {
-            idView.setText(String.valueOf(product.getID()));
-
-            quantityBox.setText(String.valueOf(product.getQuantity()));
-        } else {
-            idView.setText("No Match Found");
-        }
-    }
-
-    public void removeProduct (View view) {
-        MyDBHandler dbHandler = new MyDBHandler(this, null, null, 1);
-
-        boolean result = dbHandler.deleteProduct(
-                productBox.getText().toString());
-
-        if (result)
-        {
-            idView.setText("Record Deleted");
-            productBox.setText("");
-            quantityBox.setText("");
-        }
-        else
-            idView.setText("No Match Found");
-    }
 }
