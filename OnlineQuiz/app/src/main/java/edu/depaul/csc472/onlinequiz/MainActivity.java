@@ -36,11 +36,14 @@ public class MainActivity extends Activity {
                     Intent myIntent = new Intent(MainActivity.this, Adminchoice.class);
                     startActivity(myIntent);
 
-                } else {
-
-                    Toast.makeText(getApplicationContext(), "Seems like you 're not admin!",Toast.LENGTH_SHORT).show();
-
+                }else {
+                    CheckIfValidUser();
                 }
+//                else {
+//
+//                    Toast.makeText(getApplicationContext(), "Invalid User!",Toast.LENGTH_SHORT).show();
+//
+//                }
 
             }
         });
@@ -56,6 +59,15 @@ public class MainActivity extends Activity {
 
     }
 
+    public void CheckIfValidUser() {
+        MyDBHandler dbHandler = new MyDBHandler(this, null, null, 1);
 
+        boolean isValidUser = dbHandler.CheckIfValidUser(userNameEditText.getText().toString(), PasswordEditText.getText().toString());
+
+        if(isValidUser)
+            Toast.makeText(getApplicationContext(), "Hi User",Toast.LENGTH_SHORT).show();
+        else
+            Toast.makeText(getApplicationContext(), "Invalid User!",Toast.LENGTH_SHORT).show();
+    }
 
 }

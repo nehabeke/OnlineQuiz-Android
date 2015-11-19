@@ -93,7 +93,36 @@ public class MyDBHandler extends SQLiteOpenHelper {
         db.close();
     }
 
+    public boolean CheckIfValidUser(String emailId, String password){
+        try{
+            String query = "Select * FROM " + TABLE_USERS + " WHERE " + USER_EMAIL_ID + " =  \"" + emailId+ "\"";
 
+            SQLiteDatabase db = this.getWritableDatabase();
+
+            Cursor cursor = db.rawQuery(query, null);
+            User user = new User();
+            if (cursor.moveToFirst()) {
+                cursor.moveToFirst();
+                user.setID(Integer.parseInt(cursor.getString(0)));
+                user.setFname(cursor.getString(1));
+                user.setLname(cursor.getString(2));
+                user.setEmailid(cursor.getString(3));
+                user.setPassword(cursor.getString(4));
+                cursor.close();
+                db.close();
+
+                if(user.getPassword().trim().toString().equals(password.trim()))
+                    return true;
+                else
+                    return  false;
+            } else {
+                return  false;
+            }
+        }
+        catch (Exception ex){
+            throw ex;
+        }
+    }
 
 
   /*  public User findUser(String emailid) {

@@ -1,9 +1,11 @@
 package edu.depaul.csc472.onlinequiz;
 
+import android.app.Activity;
+
 /**
  * Created by Akshu on 11/17/2015.
  */
-public class User {
+public class User extends Activity {
     private int _id;
     private String _fname;
     private String _lname;
@@ -55,7 +57,7 @@ public class User {
     }
 
     public String getPassword() {
-        return this._emailid;
+        return this._password;
     }
 
     public void setPassword(String password) {
