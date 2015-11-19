@@ -6,7 +6,6 @@ import android.app.Activity;
  * Created by Akshu on 11/17/2015.
  */
 public class User extends Activity {
-    private int _id;
     private String _fname;
     private String _lname;
     private String _emailid;
@@ -16,20 +15,11 @@ public class User extends Activity {
 
     }
 
-    public User(int id, String fname, String lname, String emailid, String password) {
-        this._id = id;
+    public User(String fname, String lname, String emailid, String password) {
         this._fname = fname;
         this._lname = lname;
         this._emailid = emailid;
         this._password = password;
-    }
-
-    public int getID() {
-        return this._id;
-    }
-
-    public void setID(int id) {
-        this._id = id;
     }
 
     public String getFname() {

@@ -50,7 +50,7 @@ public class MainActivity extends Activity {
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent myIntent = new Intent(MainActivity.this, registerUser.class);
+                Intent myIntent = new Intent(MainActivity.this, addUserActivity.class);
                 startActivity(myIntent);
 
             }

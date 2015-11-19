@@ -61,24 +61,6 @@
         android:layout_marginBottom="98dp"
         android:layout_alignStart="@+id/userLName" />
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/userId"
-        android:layout_above="@+id/userFName"
-        android:layout_toEndOf="@+id/button"
-        android:layout_alignStart="@+id/userFName" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="User ID"
-        android:textSize="20sp"
-        android:id="@+id/textView8"
-        android:layout_alignBaseline="@+id/userId"
-        android:layout_alignBottom="@+id/userId"
-        android:layout_alignParentStart="true" />
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

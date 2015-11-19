@@ -103,7 +103,6 @@ public class MyDBHandler extends SQLiteOpenHelper {
             User user = new User();
             if (cursor.moveToFirst()) {
                 cursor.moveToFirst();
-                user.setID(Integer.parseInt(cursor.getString(0)));
                 user.setFname(cursor.getString(1));
                 user.setLname(cursor.getString(2));
                 user.setEmailid(cursor.getString(3));

@@ -6,10 +6,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
 
 public class addUserActivity extends Activity {
-    EditText userId;
     EditText userFName;
     EditText userLName;
     EditText emailId;
@@ -19,25 +17,22 @@ public class addUserActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_user);
-        userId=(EditText)findViewById(R.id.userId);
         userFName= (EditText) findViewById(R.id.userFName);
         userLName= (EditText) findViewById(R.id.userLName);
         emailId= (EditText) findViewById(R.id.emailId);
         passWord= (EditText) findViewById(R.id.passWord);
     }
+
     public void newUser(View view) {
         MyDBHandler dbHandler = new MyDBHandler(this, null, null, 1);
 
-        int uid =  Integer.parseInt(userId.getText().toString());
-        User user=  new User(uid,userFName.getText().toString(),userLName.getText().toString(),emailId.getText().toString(),passWord.getText().toString());
+        User user=  new User(userFName.getText().toString(),userLName.getText().toString(),emailId.getText().toString(),passWord.getText().toString());
 
         dbHandler.addUser(user);
-        userId.setText("");
         userFName.setText("");
         userLName.setText("");
         emailId.setText("");
         passWord.setText("");
-
     }
 
    /* public void lookupUser (View view) {
