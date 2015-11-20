@@ -5,37 +5,40 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.RadioButton;
-import android.widget.TextView;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
-import java.util.ArrayList;
+public class StudentDashboard extends Activity {
 
-public class Quiz extends Activity {
-
+    private static final int CH_REQUEST = 100; // request code
     String userId;
-    int questionId = 0;
-    ArrayList<Integer> visitedQuestions = new ArrayList<>();
-    TextView txtQuestion;
-    RadioButton rdBtnA, rdBtnB, rdBtnC, rdBtnD;
+    Button btnStartQuiz;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_quiz);
+        setContentView(R.layout.activity_student_dashboard);
 
-        txtQuestion = (TextView) findViewById(R.id.txtQuestion);
+        btnStartQuiz = (Button) findViewById(R.id.btnStartQuiz);
 
-        rdBtnA = (RadioButton) findViewById(R.id.rdBtnA);
-        rdBtnB = (RadioButton) findViewById(R.id.rdBtnB);
-        rdBtnC = (RadioButton) findViewById(R.id.rdBtnC);
-        rdBtnD = (RadioButton) findViewById(R.id.rdBtnD);
+        btnStartQuiz.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(StudentDashboard.this, Quiz.class);
+                intent.putExtra("UserId", userId);
+                startActivityForResult(intent, CH_REQUEST);
+                startActivity(intent);
+
+            }
+        });
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_quiz, menu);
+        getMenuInflater().inflate(R.menu.menu_student_dashboard, menu);
         return true;
     }
 
@@ -61,20 +64,6 @@ public class Quiz extends Activity {
         if (intent != null) {
             userId = intent.getCharSequenceExtra("UserId").toString();
             Toast.makeText(getApplicationContext(), "UserId = " + userId, Toast.LENGTH_SHORT).show();
-
-            Question question = GetQuestion();
-            txtQuestion.setText(question.getQuestion().toString());
-            rdBtnA.setText(question.getOp1().toString());
-            rdBtnB.setText(question.getOp2().toString());
-            rdBtnC.setText(question.getOp3().toString());
-            rdBtnD.setText(question.getOp4().toString());
         }
-    }
-
-    public Question GetQuestion() {
-        questionId = 2;
-        MyDBHandler dbHandler = new MyDBHandler(this, null, null, 1);
-
-        return dbHandler.GetQuestion(questionId);
     }
 }

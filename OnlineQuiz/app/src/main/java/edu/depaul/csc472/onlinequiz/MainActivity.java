@@ -11,7 +11,8 @@ import android.widget.Toast;
 
 public class MainActivity extends Activity {
 
-    EditText PasswordEditText,userNameEditText;
+    private static final int CH_REQUEST = 100; // request code
+    EditText PasswordEditText, userNameEditText;
     Button buttonLogin;
     TextView register;
 
@@ -21,10 +22,10 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-       PasswordEditText=( EditText ) findViewById(R.id.PasswordEditText);
-       userNameEditText=( EditText ) findViewById(R.id. userNameEditText);
-       buttonLogin=(  Button) findViewById(R.id.buttonLogin);
-        register = (TextView)findViewById(R.id.register);
+        PasswordEditText = (EditText) findViewById(R.id.PasswordEditText);
+        userNameEditText = (EditText) findViewById(R.id.userNameEditText);
+        buttonLogin = (Button) findViewById(R.id.buttonLogin);
+        register = (TextView) findViewById(R.id.register);
 
 
         buttonLogin.setOnClickListener(new View.OnClickListener() {
@@ -36,8 +37,18 @@ public class MainActivity extends Activity {
                     Intent myIntent = new Intent(MainActivity.this, Adminchoice.class);
                     startActivity(myIntent);
 
-                }else {
-                    CheckIfValidUser();
+                } else {
+                    boolean isValidUser = CheckIfValidUser();
+
+                    if (isValidUser) {
+                        Intent intent = new Intent(MainActivity.this, StudentDashboard.class);
+                        intent.putExtra("UserId", userNameEditText.getText().toString().trim());
+                        startActivityForResult(intent, CH_REQUEST);
+                        startActivity(intent);
+                    } else
+                        Toast.makeText(getApplicationContext(), "Invalid User!", Toast.LENGTH_SHORT).show();
+
+
                 }
 //                else {
 //
@@ -59,15 +70,15 @@ public class MainActivity extends Activity {
 
     }
 
-    public void CheckIfValidUser() {
+    public boolean CheckIfValidUser() {
         MyDBHandler dbHandler = new MyDBHandler(this, null, null, 1);
 
-        boolean isValidUser = dbHandler.CheckIfValidUser(userNameEditText.getText().toString(), PasswordEditText.getText().toString());
+        return dbHandler.CheckIfValidUser(userNameEditText.getText().toString(), PasswordEditText.getText().toString());
 
-        if(isValidUser)
-            Toast.makeText(getApplicationContext(), "Hi User",Toast.LENGTH_SHORT).show();
-        else
-            Toast.makeText(getApplicationContext(), "Invalid User!",Toast.LENGTH_SHORT).show();
+//        if(isValidUser)
+//            Toast.makeText(getApplicationContext(), "Hi User",Toast.LENGTH_SHORT).show();
+//        else
+//            Toast.makeText(getApplicationContext(), "Invalid User!",Toast.LENGTH_SHORT).show();
     }
 
 }

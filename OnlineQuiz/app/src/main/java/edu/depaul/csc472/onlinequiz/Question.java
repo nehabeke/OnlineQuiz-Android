@@ -67,7 +67,7 @@ public class Question {
     }
 
     public String getOp4() {
-        return this._op1;
+        return this._op4;
     }
 
     public void setOp4(String op4) {

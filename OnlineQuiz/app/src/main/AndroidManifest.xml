@@ -46,6 +46,10 @@
             android:name=".Quiz"
             android:label="@string/title_activity_quiz" >
         </activity>
+        <activity
+            android:name=".StudentDashboard"
+            android:label="@string/title_activity_student_dashboard" >
+        </activity>
     </application>
 
 </manifest>

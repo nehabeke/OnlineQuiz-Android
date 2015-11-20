@@ -123,6 +123,36 @@ public class MyDBHandler extends SQLiteOpenHelper {
         }
     }
 
+    public Question GetQuestion(int questionId){
+        try{
+            String query = "Select _id, _question, _opt1, _opt2, _opt3, _opt4, _answer FROM " + TABLE_QUESTION + " WHERE " + QUESTION_ID + " = " + questionId;
+
+            SQLiteDatabase db = this.getWritableDatabase();
+
+            Cursor cursor = db.rawQuery(query, null);
+            Question question = new Question();
+            if (cursor.moveToFirst()) {
+                cursor.moveToFirst();
+                question.setID(cursor.getInt(0));
+                question.setQuestion(cursor.getString(1));
+                question.setOp1(cursor.getString(2));
+                question.setOp2(cursor.getString(3));
+                question.setOp3(cursor.getString(4));
+                question.setOp4(cursor.getString(5));
+                question.setAnswer(cursor.getString(6));
+                cursor.close();
+                db.close();
+
+                return question;
+            } else {
+                return  null;
+            }
+        }
+        catch (Exception ex){
+            throw ex;
+        }
+    }
+
 
   /*  public User findUser(String emailid) {
         String query = "Select * FROM " + TABLE_USERS + " WHERE " + USER_EMAIL_ID + " =  \"" + emailid+ "\"";
