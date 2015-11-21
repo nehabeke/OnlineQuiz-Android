@@ -14,4 +14,5 @@
     <string name="title_activity_register_user">registerUser</string>
     <string name="title_activity_quiz">Quiz</string>
     <string name="title_activity_student_dashboard">StudentDashboard</string>
+    <string name="title_activity_user__score">User_Score</string>
 </resources>

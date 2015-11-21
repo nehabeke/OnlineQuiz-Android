@@ -1,7 +1,6 @@
 package edu.depaul.csc472.onlinequiz;
 
 import android.app.Activity;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -33,7 +32,7 @@ public class addQuestionActivity extends Activity {
 
         int qid =  Integer.parseInt(Qno.getText().toString());
         Question question=  new Question(qid,ETQuestion.getText().toString(),optionA.getText().toString(),optionB.getText().toString(),
-               optionC.getText().toString(),optionD.getText().toString(),Answer.getText().toString() );
+               optionC.getText().toString(),optionD.getText().toString(),Integer.parseInt(Answer.getText().toString()) );
 
         dbHandler.addQuestion(question);
         Qno.setText("");

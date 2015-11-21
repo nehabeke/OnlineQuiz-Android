@@ -10,13 +10,13 @@ public class Question {
     private String _op2;
     private String _op3;
     private String _op4;
-    private String _answer;
+    private int _answer;
 
     public Question() {
 
     }
 
-    public Question(int id, String question, String op1, String op2, String op3, String op4, String answer) {
+    public Question(int id, String question, String op1, String op2, String op3, String op4, int answer) {
         this._id = id;
         this._question = question;
         this._op1 = op1;
@@ -73,11 +73,11 @@ public class Question {
     public void setOp4(String op4) {
         this._op4 = op4;
     }
-    public String getAnswer() {
+    public int getAnswer() {
         return this._answer;
     }
 
-    public void setAnswer(String answer) {
+    public void setAnswer(int answer) {
         this._answer = answer;
     }
 }

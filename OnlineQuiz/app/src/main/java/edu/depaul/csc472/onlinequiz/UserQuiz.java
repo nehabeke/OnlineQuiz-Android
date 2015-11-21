@@ -4,48 +4,39 @@ package edu.depaul.csc472.onlinequiz;
  * Created by Neha on 11/19/2015.
  */
 public class UserQuiz {
-    private String userId;
-    private int questionId;
-    private String userAnswer;
-    private boolean isCorrect;
+    private String _userId;
+    private int _questionId;
+    private int _isAnswerCorrect;
 
+    public UserQuiz(){}
 
-    public UserQuiz(String userId, int questionId, String userAnswer, boolean isCorrect) {
-        this.userId = userId;
-        this.questionId = questionId;
-        this.userAnswer = userAnswer;
-        this.isCorrect = isCorrect;
+    public UserQuiz(String userId, int questionId, int isCorrect) {
+        this._userId = userId;
+        this._questionId = questionId;
+        this._isAnswerCorrect = isCorrect;
     }
 
-    public String getUserId() {
-        return userId;
+    public String get_userId() {
+        return _userId;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void set_userId(String userId) {
+        this._userId = userId;
     }
 
-    public String getUserAnswer() {
-        return userAnswer;
+    public int get_questionId() {
+        return _questionId;
     }
 
-    public void setUserAnswer(String userAnswer) {
-        this.userAnswer = userAnswer;
+    public void set_questionId(int questionId) {
+        this._questionId = questionId;
     }
 
-    public int getQuestionId() {
-        return questionId;
+    public int getIsAnswerCorrect() {
+        return _isAnswerCorrect;
     }
 
-    public void setQuestionId(int questionId) {
-        this.questionId = questionId;
-    }
-
-    public boolean isCorrect() {
-        return isCorrect;
-    }
-
-    public void setIsCorrect(boolean isCorrect) {
-        this.isCorrect = isCorrect;
+    public void setIsCorrect(int isCorrect) {
+        this._isAnswerCorrect = isCorrect;
     }
 }

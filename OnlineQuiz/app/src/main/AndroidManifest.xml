@@ -50,6 +50,10 @@
             android:name=".StudentDashboard"
             android:label="@string/title_activity_student_dashboard" >
         </activity>
+        <activity
+            android:name=".User_Score"
+            android:label="@string/title_activity_user__score" >
+        </activity>
     </application>
 
 </manifest>

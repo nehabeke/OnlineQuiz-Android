@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.util.ArrayList;
+
 /**
  * Created by Neha on 11/5/2015.
  */
@@ -14,6 +16,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "online.db";
     private static final String TABLE_QUESTION="questions";
     private static final String TABLE_USERS="users";
+    private static final String TABLE_USER_QUIZ="userquiz";
 
 
     private static final String USER_ID ="_id";
@@ -33,6 +36,12 @@ public class MyDBHandler extends SQLiteOpenHelper {
     private static final String KEY_OPTC= "_opt3"; //option c
     private static final String KEY_OPTD= "_opt4"; //option d
 
+    /************************************************************************************************************/
+
+    private static final String USER_QUIZ_ID = "_userId";
+    private static final String USER_QUIZ_QUESTION_ID = "_questionId";
+    private static final String IS_ANSWER_CORRECT = "_isAnswerCorrect";
+
 /*******************************************************************************************************************/
     String CREATE_USER_TABLE = "CREATE TABLE " +
             TABLE_USERS + "("
@@ -45,6 +54,12 @@ public class MyDBHandler extends SQLiteOpenHelper {
             + " TEXT, " + KEY_ANSWER+ " TEXT, "+KEY_OPTA +" TEXT, "
             +KEY_OPTB +" TEXT, "+ KEY_OPTC +" TEXT, " + KEY_OPTD+" TEXT)";
 /********************************************************************************************************************/
+
+String CREATE_USER_QUIZ_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_USER_QUIZ + " ( "
+        + USER_ID + " TEXT , " + USER_QUIZ_QUESTION_ID
+        + " INTEGER, " + IS_ANSWER_CORRECT+ " INTEGER)";
+
+    /********************************************************************************************************************/
 
     public MyDBHandler(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, DATABASE_NAME, factory, DATABASE_VERSION);
@@ -93,6 +108,45 @@ public class MyDBHandler extends SQLiteOpenHelper {
         db.close();
     }
 
+    public void addUserQuiz(UserQuiz userQuiz) {
+
+        ContentValues values = new ContentValues();
+        values.put(USER_QUIZ_ID, userQuiz.get_userId());
+        values.put(USER_QUIZ_QUESTION_ID, userQuiz.get_questionId());
+        values.put(IS_ANSWER_CORRECT, userQuiz.getIsAnswerCorrect());
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.insert(TABLE_USER_QUIZ, null, values);
+        db.close();
+    }
+
+    public ArrayList<UserQuiz> GetUserScore(String userId){
+        try{
+            String query = "Select _userId, _questionId, _isAnswerCorrect FROM " + CREATE_USER_QUIZ_TABLE + " WHERE " + USER_QUIZ_ID + " = " + userId;
+
+            SQLiteDatabase db = this.getWritableDatabase();
+            ArrayList<UserQuiz> userQuizList = new ArrayList<>();
+            Cursor cursor = db.rawQuery(query, null);
+            UserQuiz userQuiz = new UserQuiz();
+            if (cursor.moveToFirst()) {
+                for(int i=0;i<cursor.getCount();i++){
+                    userQuiz.setIsCorrect(cursor.getInt(0));
+                    userQuiz.set_questionId(cursor.getInt(1));
+                    userQuiz.setIsCorrect(cursor.getInt(2));
+                    userQuizList.add(userQuiz);
+                }
+                cursor.close();
+                db.close();
+
+                return userQuizList;
+            } else {
+                return  null;
+            }
+        }
+        catch (Exception ex){
+            throw ex;
+        }
+    }
+
     public boolean CheckIfValidUser(String emailId, String password){
         try{
             String query = "Select * FROM " + TABLE_USERS + " WHERE " + USER_EMAIL_ID + " =  \"" + emailId+ "\"";
@@ -139,7 +193,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
                 question.setOp2(cursor.getString(3));
                 question.setOp3(cursor.getString(4));
                 question.setOp4(cursor.getString(5));
-                question.setAnswer(cursor.getString(6));
+                question.setAnswer(cursor.getInt(6));
                 cursor.close();
                 db.close();
 
