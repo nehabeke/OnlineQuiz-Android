@@ -47,7 +47,13 @@ public class MainActivity extends Activity {
 
                             startActivity(intent);
 
-                        } else {
+                        }else  if (txtUserName.getText().toString().equals("p") && txtPassword.getText().toString().equals("p")) {
+                            Intent intent = new Intent(MainActivity.this, ProfessorDashboard.class);
+
+                            startActivity(intent);
+
+                        }
+                        else {
                             boolean isValidUser = CheckIfValidUser();
 
                             if (isValidUser) {

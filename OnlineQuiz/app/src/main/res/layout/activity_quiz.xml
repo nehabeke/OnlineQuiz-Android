@@ -77,7 +77,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="<"
+        android:text="Prev"
         android:id="@+id/btnPrev"
         android:layout_marginTop="85dp"
         android:onClick="onRadioButtonClicked"
@@ -95,7 +95,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=">"
+        android:text="Next"
         android:id="@+id/btnNext"
         android:layout_alignTop="@+id/btnPrev"
         android:layout_toEndOf="@+id/btnSave" />

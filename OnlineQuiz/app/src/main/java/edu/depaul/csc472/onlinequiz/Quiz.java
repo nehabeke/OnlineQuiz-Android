@@ -133,7 +133,6 @@ public class Quiz extends Activity {
         public void onClick(View v) {
             Intent intent = new Intent(Quiz.this, User_Score.class);
             intent.putExtra("UserId", userId);
-            intent.putExtra("IsAdmin", isAdmin);
             startActivityForResult(intent, CH_REQUEST);
             startActivity(intent);
         }

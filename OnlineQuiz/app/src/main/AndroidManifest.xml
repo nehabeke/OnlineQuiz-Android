@@ -54,6 +54,14 @@
             android:name=".User_Score"
             android:label="@string/title_activity_user__score" >
         </activity>
+        <activity
+            android:name=".ProfessorDashboard"
+            android:label="@string/title_activity_professor_dashboard" >
+        </activity>
+        <activity
+            android:name=".StudentReportList"
+            android:label="@string/title_activity_student_report_list" >
+        </activity>
     </application>
 
 </manifest>

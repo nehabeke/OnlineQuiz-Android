@@ -239,29 +239,41 @@ String CREATE_USER_QUIZ_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_USER_QUIZ 
         }
     }
 
-    public ArrayList<UserQuiz> GetAllUserQuizDetails(){
+    public ArrayList<StudentReport> GetAllUserQuizDetails(){
         try{
-            String query = "Select _userId, _questionId, _isAnswerCorrect FROM " + TABLE_USER_QUIZ;
+            String query = "Select _emailid FROM " + TABLE_USERS;
 
             SQLiteDatabase db = this.getWritableDatabase();
             Cursor cursor = db.rawQuery(query, null);
 
-            ArrayList<UserQuiz> userQuizList = new ArrayList<>();
-            UserQuiz userQuiz;
+            ArrayList<StudentReport> list = new ArrayList<>();
+            StudentReport objStudentReport;
             while (cursor.moveToNext()) {
-                userQuiz = new UserQuiz();
-                userQuiz.setUserId(cursor.getString(0));
-                userQuiz.setQuestionId(cursor.getInt(1));
-                userQuiz.setIsCorrect(cursor.getString(2));
-                userQuizList.add(userQuiz);
+                objStudentReport = new StudentReport();
+                objStudentReport.setUser(GetUser(cursor.getString(0)));
+                objStudentReport.setScore(GetUserScore(cursor.getString(0)));
+                list.add(objStudentReport);
             }
 
             db.close();
-            return userQuizList;
+            return list;
         }
         catch (Exception ex){
             throw ex;
         }
+    }
+
+    public int GetUserScore(String userId) {
+        ArrayList<UserQuiz> list = GetUserQuizByUserId(userId);
+
+        int score = 0;
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getIsAnswerCorrect().equals("true")) {
+                score++;
+            }
+        }
+
+        return score;
     }
 
     public boolean CheckIfValidUser(String emailId, String password){
