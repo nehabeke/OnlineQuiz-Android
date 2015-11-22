@@ -6,37 +6,37 @@ package edu.depaul.csc472.onlinequiz;
 public class UserQuiz {
     private String _userId;
     private int _questionId;
-    private int _isAnswerCorrect;
+    private String _isAnswerCorrect;
 
     public UserQuiz(){}
 
-    public UserQuiz(String userId, int questionId, int isCorrect) {
+    public UserQuiz(String userId, int questionId, String isCorrect) {
         this._userId = userId;
         this._questionId = questionId;
         this._isAnswerCorrect = isCorrect;
     }
 
-    public String get_userId() {
+    public String getUserId() {
         return _userId;
     }
 
-    public void set_userId(String userId) {
+    public void setUserId(String userId) {
         this._userId = userId;
     }
 
-    public int get_questionId() {
+    public int getQuestionId() {
         return _questionId;
     }
 
-    public void set_questionId(int questionId) {
+    public void setQuestionId(int questionId) {
         this._questionId = questionId;
     }
 
-    public int getIsAnswerCorrect() {
+    public String getIsAnswerCorrect() {
         return _isAnswerCorrect;
     }
 
-    public void setIsCorrect(int isCorrect) {
+    public void setIsCorrect(String isCorrect) {
         this._isAnswerCorrect = isCorrect;
     }
 }

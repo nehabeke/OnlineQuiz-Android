@@ -31,9 +31,8 @@ public class MainActivity extends Activity {
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (userNameEditText.getText().toString().equals("admin") &&
-                        PasswordEditText.getText().toString().equals("admin")) {
-                    Toast.makeText(getApplicationContext(), "Hello admin!", Toast.LENGTH_SHORT).show();
+                if (userNameEditText.getText().toString().equals("a") &&
+                        PasswordEditText.getText().toString().equals("a")) {
                     Intent myIntent = new Intent(MainActivity.this, Adminchoice.class);
                     startActivity(myIntent);
 

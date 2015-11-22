@@ -7,9 +7,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 public class User_Score extends Activity {
 
+    String userId;
     TextView txtScore;
+    TextView txtFName;
+    TextView txtLName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,6 +22,8 @@ public class User_Score extends Activity {
         setContentView(R.layout.activity_user__score);
 
         txtScore = (TextView) findViewById(R.id.txtScore);
+        txtFName = (TextView) findViewById(R.id.txtFName);
+        txtLName = (TextView) findViewById(R.id.txtLName);
     }
 
     @Override
@@ -43,11 +50,44 @@ public class User_Score extends Activity {
 
     @Override
     protected void onStart() {
-        super.onStart();
-        Intent intent = getIntent();
-        if (intent != null) {
-            int score = Integer.parseInt(intent.getCharSequenceExtra("Score").toString());
-            txtScore.setText(score);
+        try {
+            super.onStart();
+            Intent intent = getIntent();
+            if (intent != null) {
+                userId = intent.getCharSequenceExtra("UserId").toString();
+
+                User user = GetUser();
+                if(user != null) {
+                    txtFName.setText(user.getFname());
+                    txtLName.setText(user.getLname());
+                }
+
+                int score = GetUserScore();
+                txtScore.setText(String.valueOf(score));
+            }
         }
+        catch (Exception ex){
+            throw ex;
+        }
+    }
+
+    public User GetUser(){
+        MyDBHandler dbHandler = new MyDBHandler(this, null, null, 1);
+        return dbHandler.GetUser(userId);
+    }
+
+    public int GetUserScore() {
+        MyDBHandler dbHandler = new MyDBHandler(this, null, null, 1);
+        ArrayList<UserQuiz> list = dbHandler.GetUserScore(userId);
+
+        int score = 0;
+        for (int i = 0; i < list.size(); i++) {
+            String iscorrect = list.get(i).getIsAnswerCorrect();
+            if (iscorrect.equals("true")) {
+                score++;
+            }
+        }
+
+        return score;
     }
 }

@@ -7,7 +7,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 public class StudentDashboard extends Activity {
 
@@ -63,7 +62,7 @@ public class StudentDashboard extends Activity {
         Intent intent = getIntent();
         if (intent != null) {
             userId = intent.getCharSequenceExtra("UserId").toString();
-            Toast.makeText(getApplicationContext(), "UserId = " + userId, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getApplicationContext(), "UserId = " + userId, Toast.LENGTH_SHORT).show();
         }
     }
 }

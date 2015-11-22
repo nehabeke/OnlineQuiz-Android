@@ -56,8 +56,8 @@ public class MyDBHandler extends SQLiteOpenHelper {
 /********************************************************************************************************************/
 
 String CREATE_USER_QUIZ_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_USER_QUIZ + " ( "
-        + USER_ID + " TEXT , " + USER_QUIZ_QUESTION_ID
-        + " INTEGER, " + IS_ANSWER_CORRECT+ " INTEGER)";
+        + USER_QUIZ_ID + " TEXT , " + USER_QUIZ_QUESTION_ID
+        + " INTEGER, " + IS_ANSWER_CORRECT+ " TEXT)";
 
     /********************************************************************************************************************/
 
@@ -70,6 +70,7 @@ String CREATE_USER_QUIZ_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_USER_QUIZ 
 
         db.execSQL(CREATE_QUESTION_TABLE);
         db.execSQL(CREATE_USER_TABLE);
+        db.execSQL(CREATE_USER_QUIZ_TABLE);
     }
 
     @Override
@@ -77,6 +78,7 @@ String CREATE_USER_QUIZ_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_USER_QUIZ 
                           int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_USERS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_QUESTION);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_USER_QUIZ);
         onCreate(db);
     }
 
@@ -108,39 +110,85 @@ String CREATE_USER_QUIZ_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_USER_QUIZ 
         db.close();
     }
 
-    public void addUserQuiz(UserQuiz userQuiz) {
+     public void addUserQuiz(UserQuiz userQuiz) {
+        try {
+            ContentValues values = new ContentValues();
 
-        ContentValues values = new ContentValues();
-        values.put(USER_QUIZ_ID, userQuiz.get_userId());
-        values.put(USER_QUIZ_QUESTION_ID, userQuiz.get_questionId());
-        values.put(IS_ANSWER_CORRECT, userQuiz.getIsAnswerCorrect());
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.insert(TABLE_USER_QUIZ, null, values);
-        db.close();
+            if (GetUserQuiz(userQuiz)) {
+                //Update
+
+                SQLiteDatabase db = this.getWritableDatabase();
+                values.put(USER_QUIZ_ID, userQuiz.getUserId());
+                values.put(USER_QUIZ_QUESTION_ID, userQuiz.getQuestionId());
+                values.put(IS_ANSWER_CORRECT, userQuiz.getIsAnswerCorrect());
+
+                String[] args = new String[]{String.valueOf(userQuiz.getQuestionId())};
+                String where = "_questionId = ? AND _userId='" + userQuiz.getUserId() + "'";
+                db.update(TABLE_USER_QUIZ, values, where, args);
+                //db.update(TABLE_USER_QUIZ, values, "_questionId=? AND _userId=?", args);
+
+//                db.update(TABLE_USER_QUIZ,
+//                        values,
+//                        USER_QUIZ_QUESTION_ID + " = ? AND " + USER_QUIZ_ID + " = ?",
+//                        new String[]{String.valueOf(userQuiz.getQuestionId()), "'" + userQuiz.getUserId() + "'"});
+
+                db.close();
+            } else {
+                //Add
+                values.put(USER_QUIZ_ID, userQuiz.getUserId());
+                values.put(USER_QUIZ_QUESTION_ID, userQuiz.getQuestionId());
+                values.put(IS_ANSWER_CORRECT, userQuiz.getIsAnswerCorrect());
+                SQLiteDatabase db = this.getWritableDatabase();
+                db.insert(TABLE_USER_QUIZ, null, values);
+                db.close();
+            }
+        }catch (Exception ex){
+                 throw ex;
+        }
+     }
+
+    public boolean GetUserQuiz(UserQuiz userQuiz){
+        try{
+            String query = "Select * FROM " + TABLE_USER_QUIZ + " WHERE " + USER_QUIZ_QUESTION_ID + " = " + userQuiz.getQuestionId() + " AND " + USER_QUIZ_ID + " = '" + userQuiz.getUserId() + "'";
+
+            SQLiteDatabase db = this.getWritableDatabase();
+
+            Cursor cursor = db.rawQuery(query, null);
+
+            if (cursor.moveToFirst()) {
+                cursor.moveToFirst();
+                cursor.close();
+                db.close();
+
+                return true;
+            } else {
+                return false;
+            }
+        }
+        catch (Exception ex){
+            throw ex;
+        }
     }
 
     public ArrayList<UserQuiz> GetUserScore(String userId){
         try{
-            String query = "Select _userId, _questionId, _isAnswerCorrect FROM " + CREATE_USER_QUIZ_TABLE + " WHERE " + USER_QUIZ_ID + " = " + userId;
+            String query = "Select _userId, _questionId, _isAnswerCorrect FROM " + TABLE_USER_QUIZ + " WHERE " + USER_QUIZ_ID + " = '" + userId + "'";
 
             SQLiteDatabase db = this.getWritableDatabase();
-            ArrayList<UserQuiz> userQuizList = new ArrayList<>();
             Cursor cursor = db.rawQuery(query, null);
-            UserQuiz userQuiz = new UserQuiz();
-            if (cursor.moveToFirst()) {
-                for(int i=0;i<cursor.getCount();i++){
-                    userQuiz.setIsCorrect(cursor.getInt(0));
-                    userQuiz.set_questionId(cursor.getInt(1));
-                    userQuiz.setIsCorrect(cursor.getInt(2));
-                    userQuizList.add(userQuiz);
-                }
-                cursor.close();
-                db.close();
 
-                return userQuizList;
-            } else {
-                return  null;
+            ArrayList<UserQuiz> userQuizList = new ArrayList<>();
+            UserQuiz userQuiz;
+            while (cursor.moveToNext()) {
+                    userQuiz = new UserQuiz();
+                    userQuiz.setUserId(cursor.getString(0));
+                    userQuiz.setQuestionId(cursor.getInt(1));
+                    userQuiz.setIsCorrect(cursor.getString(2));
+                    userQuizList.add(userQuiz);
             }
+
+            db.close();
+            return userQuizList;
         }
         catch (Exception ex){
             throw ex;
@@ -170,6 +218,33 @@ String CREATE_USER_QUIZ_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_USER_QUIZ 
                     return  false;
             } else {
                 return  false;
+            }
+        }
+        catch (Exception ex){
+            throw ex;
+        }
+    }
+
+    public User GetUser(String userId){
+        try{
+            String query = "Select _fname, _lname, _emailid, _password FROM " + TABLE_USERS + " WHERE " + USER_EMAIL_ID + " = '" + userId + "'";
+
+            SQLiteDatabase db = this.getWritableDatabase();
+
+            Cursor cursor = db.rawQuery(query, null);
+            User objUser = new User();
+            if (cursor.moveToFirst()) {
+                cursor.moveToFirst();
+                objUser.setFname(cursor.getString(0));
+                objUser.setLname(cursor.getString(1));
+                objUser.setEmailid(cursor.getString(2));
+                objUser.setPassword(cursor.getString(3));
+                cursor.close();
+                db.close();
+
+                return objUser;
+            } else {
+                return  null;
             }
         }
         catch (Exception ex){

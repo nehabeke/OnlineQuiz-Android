@@ -21,11 +21,12 @@ public class Quiz extends Activity {
     int prevQuestion = 0;
     int tempQuestionId = 0;
     int noOfQuestions = 0;
-    int userAnswer;
+    String userAnswer;
     ArrayList<Integer> visitedQuestions = new ArrayList<>();
     TextView txtQuestion;
     RadioButton rdBtnA, rdBtnB, rdBtnC, rdBtnD;
     Button btnPrev, btnSave, btnNext, btnSubmit;
+    int totalQuestions = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +71,7 @@ public class Quiz extends Activity {
                     else
                         btnPrev.setEnabled(true);
 
-                    if(noOfQuestions >= 5)
+                    if(noOfQuestions >= totalQuestions)
                         btnNext.setEnabled(false);
                     else
                         btnNext.setEnabled(true);
@@ -106,7 +107,7 @@ public class Quiz extends Activity {
                     else
                         btnPrev.setEnabled(true);
 
-                    if(noOfQuestions >= 5)
+                    if(noOfQuestions >= totalQuestions)
                         btnNext.setEnabled(false);
                     else
                         btnNext.setEnabled(true);
@@ -122,6 +123,7 @@ public class Quiz extends Activity {
             @Override
             public void onClick(View v) {
                 SaveUserQuiz();
+                Toast.makeText(getApplicationContext(), "Answer Saved", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -129,7 +131,7 @@ public class Quiz extends Activity {
         @Override
         public void onClick(View v) {
             Intent intent = new Intent(Quiz.this, User_Score.class);
-            intent.putExtra("Score", GetUserScore());
+            intent.putExtra("UserId", userId);
             startActivityForResult(intent, CH_REQUEST);
             startActivity(intent);
         }
@@ -165,7 +167,7 @@ public class Quiz extends Activity {
         Intent intent = getIntent();
         if (intent != null) {
             userId = intent.getCharSequenceExtra("UserId").toString();
-            Toast.makeText(getApplicationContext(), "UserId = " + userId, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getApplicationContext(), "UserId = " + userId, Toast.LENGTH_SHORT).show();
 
             Question question = GetQuestion(questionId);
             if(question != null) {
@@ -217,50 +219,36 @@ public class Quiz extends Activity {
         switch(view.getId()) {
             case R.id.rdBtnA:
                 if (checked)
-                    userAnswer = 1;
+                    userAnswer = "1";
                 break;
             case R.id.rdBtnB:
                 if (checked)
-                    userAnswer = 2;
+                    userAnswer = "2";
                 break;
             case R.id.rdBtnC:
                 if (checked)
-                    userAnswer = 3;
+                    userAnswer = "3";
                 break;
             case R.id.rdBtnD:
                 if (checked)
-                    userAnswer = 4;
+                    userAnswer = "4";
                 break;
         }
     }
 
-    public int checkIfAnwerTrue(){
+    public String checkIfAnwerTrue(){
         MyDBHandler dbHandler = new MyDBHandler(this, null, null, 1);
         Question question = dbHandler.GetQuestion(questionId);
 
-        if(question.getAnswer() == userAnswer)
-            return 1;
+        if(String.valueOf(question.getAnswer()).equals(userAnswer))
+            return "true";
         else
-            return 0;
+            return "false";
     }
 
-    public  void SaveUserQuiz(){
+    public  void SaveUserQuiz() {
         MyDBHandler dbHandler = new MyDBHandler(this, null, null, 1);
         UserQuiz userQuiz = new UserQuiz(userId, questionId, checkIfAnwerTrue());
         dbHandler.addUserQuiz(userQuiz);
-    }
-
-    public int GetUserScore(){
-        MyDBHandler dbHandler = new MyDBHandler(this, null, null, 1);
-        ArrayList<UserQuiz> list = dbHandler.GetUserScore(userId);
-
-        int score = 0;
-        for(int i = 0; i < list.size(); i++){
-            if(list.get(i).getIsAnswerCorrect() == 1){
-                score++;
-            }
-        }
-
-        return score;
     }
 }

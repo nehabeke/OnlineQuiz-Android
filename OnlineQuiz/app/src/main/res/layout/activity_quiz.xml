@@ -27,6 +27,13 @@
         android:layout_below="@+id/textView7"
         android:layout_alignParentStart="true" />
 
+    <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id="@+id/radioGroup"
+        android:layout_below="@+id/txtQuestion"
+        android:layout_toStartOf="@+id/btnSubmit">
     <RadioButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -35,7 +42,8 @@
         android:layout_below="@+id/txtQuestion"
         android:layout_alignParentStart="true"
         android:layout_marginTop="52dp"
-        android:onClick="onRadioButtonClicked"/>
+        android:onClick="onRadioButtonClicked"
+        android:layout_gravity="center_horizontal" />
 
     <RadioButton
         android:layout_width="wrap_content"
@@ -44,7 +52,8 @@
         android:id="@+id/rdBtnB"
         android:layout_below="@+id/rdBtnA"
         android:layout_alignParentStart="true"
-        android:onClick="onRadioButtonClicked"/>
+        android:onClick="onRadioButtonClicked"
+        android:layout_gravity="center_horizontal" />
 
     <RadioButton
         android:layout_width="wrap_content"
@@ -53,7 +62,8 @@
         android:id="@+id/rdBtnC"
         android:layout_below="@+id/rdBtnB"
         android:layout_alignParentStart="true"
-        android:onClick="onRadioButtonClicked"/>
+        android:onClick="onRadioButtonClicked"
+        android:layout_gravity="center_horizontal" />
 
     <RadioButton
         android:layout_width="wrap_content"
@@ -61,17 +71,18 @@
         android:text="New RadioButton"
         android:id="@+id/rdBtnD"
         android:layout_below="@+id/rdBtnC"
-        android:layout_alignParentStart="true" />
-
+        android:layout_alignParentStart="true"
+        android:layout_gravity="center_horizontal" />
+    </RadioGroup>
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Prev"
         android:id="@+id/btnPrev"
-        android:layout_below="@+id/rdBtnD"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="58dp"
-        android:onClick="onRadioButtonClicked"/>
+        android:layout_marginTop="83dp"
+        android:onClick="onRadioButtonClicked"
+        android:layout_below="@+id/radioGroup"
+        android:layout_alignParentStart="true" />
 
     <Button
         android:layout_width="wrap_content"
