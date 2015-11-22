@@ -1,74 +1,141 @@
 package edu.depaul.csc472.onlinequiz;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class addUserActivity extends Activity {
-    EditText userFName;
-    EditText userLName;
-    EditText emailId;
-    EditText passWord;
+    private static final int CH_REQUEST = 100; // request code
+    String userId;
+    String isAdmin;
+    EditText txtFName;
+    EditText txtLName;
+    EditText txtEmailId;
+    EditText txtUserPassword;
+    EditText txtReenterPassword;
+    Button btnDelete;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_user);
-        userFName= (EditText) findViewById(R.id.userFName);
-        userLName= (EditText) findViewById(R.id.userLName);
-        emailId= (EditText) findViewById(R.id.emailId);
-        passWord= (EditText) findViewById(R.id.passWord);
+        txtFName= (EditText) findViewById(R.id.txtFName);
+        txtLName= (EditText) findViewById(R.id.txtLName);
+        txtEmailId= (EditText) findViewById(R.id.txtEmailId);
+        txtUserPassword = (EditText) findViewById(R.id.txtUserPassword);
+        txtReenterPassword = (EditText) findViewById(R.id.txtReenterPassword);
+        btnDelete = (Button) findViewById(R.id.btnDelete);
+
+        btnDelete.setEnabled(false);
+
+        btnDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (txtEmailId.getText() != null || txtEmailId.getText().toString() != "") {
+                    if (DeleteUser()) {
+                        Toast.makeText(getApplicationContext(), "User deleted successfully.", Toast.LENGTH_SHORT).show();
+                        txtFName.setText("");
+                        txtLName.setText("");
+                        txtEmailId.setText("");
+                        txtUserPassword.setText("");
+                        txtReenterPassword.setText("");
+                    }
+                    else
+                        Toast.makeText(getApplicationContext(), "Error occurred while deleting user.", Toast.LENGTH_SHORT).show();
+                } else
+                    Toast.makeText(getApplicationContext(), "Email id can not be empty.", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     public void newUser(View view) {
-        MyDBHandler dbHandler = new MyDBHandler(this, null, null, 1);
+        if(txtFName.getText().equals(null) || txtFName.getText().toString().equals(""))
+            Toast.makeText(getApplicationContext(), "Enter first name.", Toast.LENGTH_SHORT).show();
+        else if(txtLName.getText().equals(null) || txtLName.getText().toString().equals(""))
+            Toast.makeText(getApplicationContext(), "Enter last name.", Toast.LENGTH_SHORT).show();
+        else if(txtEmailId.getText().equals(null) || txtEmailId.getText().toString().equals(""))
+            Toast.makeText(getApplicationContext(), "Enter email id.", Toast.LENGTH_SHORT).show();
+        else if(txtUserPassword.getText().equals(null) || txtUserPassword.getText().toString().equals(""))
+            Toast.makeText(getApplicationContext(), "Enter password.", Toast.LENGTH_SHORT).show();
+        else if(txtReenterPassword.getText().equals(null) || txtReenterPassword.getText().toString().equals(""))
+            Toast.makeText(getApplicationContext(), "Re-enter password.", Toast.LENGTH_SHORT).show();
+        else {
+            if(txtUserPassword.getText().toString().trim().equals(txtReenterPassword.getText().toString().trim())) {
+                MyDBHandler dbHandler = new MyDBHandler(this, null, null, 1);
 
-        User user=  new User(userFName.getText().toString(),userLName.getText().toString(),emailId.getText().toString(),passWord.getText().toString());
+                User user = new User(txtFName.getText().toString().trim(), txtLName.getText().toString().trim(), txtEmailId.getText().toString().trim(), txtUserPassword.getText().toString().trim());
 
-        dbHandler.addUser(user);
-        userFName.setText("");
-        userLName.setText("");
-        emailId.setText("");
-        passWord.setText("");
-    }
+                dbHandler.addUser(user);
+                Toast.makeText(getApplicationContext(), "User Saved Successfully.", Toast.LENGTH_SHORT).show();
 
-   /* public void lookupUser (View view) {
-        MyDBHandler dbHandler = new MyDBHandler(this, null, null, 1);
+                if(isAdmin.equals("false")) {
+                    Intent intent = new Intent(addUserActivity.this, StudentDashboard.class);
+                    intent.putExtra("UserId", userId);
+                    intent.putExtra("IsAdmin", isAdmin);
 
-        User user = dbHandler.findUser(emailId.getText().toString());
+                    startActivityForResult(intent, CH_REQUEST);
+                    startActivity(intent);
+                }
+                else {
+                    Intent intent = new Intent(addUserActivity.this, Adminchoice.class);
 
-        if (user != null) {
-            userId.setText(String.valueOf(user.getID()));
-
-            userFName.setText(String.valueOf(user.getFname()));
-            userLName.setText(String.valueOf(user.getLname()));
-            emailId.setText(String.valueOf(user.getEmailid()));
-            passWord.setText("");
-
-        } else {
-            userId.setText("No Match Found");
+                    startActivityForResult(intent, CH_REQUEST);
+                    startActivity(intent);
+                }
+            }
+            else {
+                Toast.makeText(getApplicationContext(), "Password is not matching with confirm password.", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
-    public void removeUser (View view) {
+    public boolean DeleteUser() {
         MyDBHandler dbHandler = new MyDBHandler(this, null, null, 1);
 
-        boolean result = dbHandler.deleteUser(
-                emailId.getText().toString());
+        return dbHandler.deleteUser(txtEmailId.getText().toString());
+    }
 
-        if (result)
-        {
-            userId.setText("Record Deleted");
-            userFName.setText("");
-            userLName.setText("");
-            passWord.setText("");
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Intent intent = getIntent();
+        if (intent != null) {
+            if(intent.getCharSequenceExtra("UserId") != null){
+
+                isAdmin = intent.getCharSequenceExtra("IsAdmin").toString();
+
+                if(isAdmin.equals("true"))
+                    btnDelete.setEnabled(true);
+                else
+                    btnDelete.setEnabled(false);
+
+                if(isAdmin.equals("false")){
+                    userId = intent.getCharSequenceExtra("UserId").toString();
+                    User objUser = GetUser();
+                    if(objUser != null) {
+                        txtFName.setText(objUser.getFname());
+                        txtLName.setText(objUser.getLname());
+                        txtEmailId.setText(objUser.getEmailid());
+                        txtUserPassword.setText(objUser.getPassword());
+                        txtReenterPassword.setText(objUser.getPassword());
+                    }
+                }
+            }
         }
-        else
-            userId.setText("No Match Found");
-    }*/
+    }
+
+    public User GetUser() {
+        MyDBHandler dbHandler = new MyDBHandler(this, null, null, 1);
+
+        return dbHandler.GetUser(userId);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.

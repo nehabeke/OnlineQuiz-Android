@@ -77,27 +77,27 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Prev"
+        android:text="<"
         android:id="@+id/btnPrev"
-        android:layout_marginTop="83dp"
+        android:layout_marginTop="85dp"
         android:onClick="onRadioButtonClicked"
         android:layout_below="@+id/radioGroup"
-        android:layout_alignParentStart="true" />
+        android:layout_toEndOf="@+id/textView7" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Save"
         android:id="@+id/btnSave"
-        android:layout_alignBottom="@+id/btnPrev"
-        android:layout_toEndOf="@+id/textView7" />
+        android:layout_below="@+id/btnPrev"
+        android:layout_alignStart="@+id/btnPrev" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Next"
+        android:text=">"
         android:id="@+id/btnNext"
-        android:layout_alignBottom="@+id/btnSave"
+        android:layout_alignTop="@+id/btnPrev"
         android:layout_toEndOf="@+id/btnSave" />
 
     <Button
@@ -105,7 +105,7 @@
         android:layout_height="wrap_content"
         android:text="Submit"
         android:id="@+id/btnSubmit"
-        android:layout_alignTop="@+id/btnNext"
-        android:layout_toEndOf="@+id/btnNext" />
+        android:layout_alignTop="@+id/btnSave"
+        android:layout_toEndOf="@+id/btnSave" />
 
 </RelativeLayout>

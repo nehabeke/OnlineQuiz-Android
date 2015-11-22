@@ -20,6 +20,13 @@
         android:text="Quiz Report"
         android:id="@+id/btnReport"
         android:layout_below="@+id/btnStartQuiz"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="43dp" />
+        android:layout_alignEnd="@+id/btnProfile" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Profile"
+        android:id="@+id/btnProfile"
+        android:layout_below="@+id/btnReport"
+        android:layout_alignParentStart="true" />
 </RelativeLayout>

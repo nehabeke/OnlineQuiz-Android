@@ -83,21 +83,36 @@ String CREATE_USER_QUIZ_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_USER_QUIZ 
     }
 
     public void addUser(User user) {
-
         ContentValues values = new ContentValues();
         values.put(USER_FIRST_NAME, user.getFname());
         values.put(USER_LAST_NAME, user.getLname());
         values.put(USER_EMAIL_ID, user.getEmailid());
         values.put(USER_PASSWORD, user.getPassword());
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.insert(TABLE_USERS, null, values);
-        db.close();
+
+        try {
+            if (GetUser(user.getEmailid()) != null) {
+                //Update
+                SQLiteDatabase db = this.getWritableDatabase();
+//                String[] args = new String[]{"'" + String.valueOf(user.getEmailid()) + "'"};
+//                String where = "_emailid = ?";
+//                db.update(TABLE_USERS, values, where, args);
+
+                ContentValues args = new ContentValues();
+
+                db.update(TABLE_USERS, values, USER_EMAIL_ID + " = '" + user.getEmailid() + "'", null);
+                db.close();
+            } else {
+                //Add
+                SQLiteDatabase db = this.getWritableDatabase();
+                db.insert(TABLE_USERS, null, values);
+                db.close();
+            }
+        }catch (Exception ex){
+            throw ex;
+        }
     }
 
-
-
     public void addQuestion(Question question) {
-
         ContentValues values = new ContentValues();
         values.put(QUIZ_QUESTION, question.getQuestion());
         values.put(KEY_ANSWER,question.getAnswer());
@@ -105,39 +120,68 @@ String CREATE_USER_QUIZ_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_USER_QUIZ 
         values.put(KEY_OPTB, question.getOp2());
         values.put(KEY_OPTC, question.getOp3());
         values.put(KEY_OPTD, question.getOp4());
-        SQLiteDatabase db = this.getWritableDatabase();
-       db.insert(TABLE_QUESTION, null, values);
-        db.close();
+
+        try {
+            if (GetQuestion(question.getID()) != null) {
+                //Update
+                SQLiteDatabase db = this.getWritableDatabase();
+                values.put(QUESTION_ID, question.getID());
+                String[] args = new String[]{String.valueOf(question.getID())};
+                String where = "_id = ?";
+                db.update(TABLE_QUESTION, values, where, args);
+                db.close();
+            } else {
+                //Add
+                SQLiteDatabase db = this.getWritableDatabase();
+                values.put(QUESTION_ID, GetMaxQuestionId());
+                db.insert(TABLE_QUESTION, null, values);
+                db.close();
+            }
+
+        }catch (Exception ex){
+            throw ex;
+        }
+    }
+
+    public int GetMaxQuestionId(){
+        try{
+            String query = "Select MAX(_id) + 1 FROM " + TABLE_QUESTION;
+
+            SQLiteDatabase db = this.getWritableDatabase();
+
+            Cursor cursor = db.rawQuery(query, null);
+
+            if (cursor.moveToFirst()) {
+                int id = cursor.getInt(0);
+                cursor.close();
+                db.close();
+                return id;
+            } else {
+                return  0;
+            }
+        }
+        catch (Exception ex){
+            throw ex;
+        }
     }
 
      public void addUserQuiz(UserQuiz userQuiz) {
         try {
             ContentValues values = new ContentValues();
 
+            values.put(USER_QUIZ_ID, userQuiz.getUserId());
+            values.put(USER_QUIZ_QUESTION_ID, userQuiz.getQuestionId());
+            values.put(IS_ANSWER_CORRECT, userQuiz.getIsAnswerCorrect());
+
             if (GetUserQuiz(userQuiz)) {
                 //Update
-
                 SQLiteDatabase db = this.getWritableDatabase();
-                values.put(USER_QUIZ_ID, userQuiz.getUserId());
-                values.put(USER_QUIZ_QUESTION_ID, userQuiz.getQuestionId());
-                values.put(IS_ANSWER_CORRECT, userQuiz.getIsAnswerCorrect());
-
                 String[] args = new String[]{String.valueOf(userQuiz.getQuestionId())};
                 String where = "_questionId = ? AND _userId='" + userQuiz.getUserId() + "'";
                 db.update(TABLE_USER_QUIZ, values, where, args);
-                //db.update(TABLE_USER_QUIZ, values, "_questionId=? AND _userId=?", args);
-
-//                db.update(TABLE_USER_QUIZ,
-//                        values,
-//                        USER_QUIZ_QUESTION_ID + " = ? AND " + USER_QUIZ_ID + " = ?",
-//                        new String[]{String.valueOf(userQuiz.getQuestionId()), "'" + userQuiz.getUserId() + "'"});
-
                 db.close();
             } else {
                 //Add
-                values.put(USER_QUIZ_ID, userQuiz.getUserId());
-                values.put(USER_QUIZ_QUESTION_ID, userQuiz.getQuestionId());
-                values.put(IS_ANSWER_CORRECT, userQuiz.getIsAnswerCorrect());
                 SQLiteDatabase db = this.getWritableDatabase();
                 db.insert(TABLE_USER_QUIZ, null, values);
                 db.close();
@@ -170,7 +214,7 @@ String CREATE_USER_QUIZ_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_USER_QUIZ 
         }
     }
 
-    public ArrayList<UserQuiz> GetUserScore(String userId){
+    public ArrayList<UserQuiz> GetUserQuizByUserId(String userId){
         try{
             String query = "Select _userId, _questionId, _isAnswerCorrect FROM " + TABLE_USER_QUIZ + " WHERE " + USER_QUIZ_ID + " = '" + userId + "'";
 
@@ -185,6 +229,31 @@ String CREATE_USER_QUIZ_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_USER_QUIZ 
                     userQuiz.setQuestionId(cursor.getInt(1));
                     userQuiz.setIsCorrect(cursor.getString(2));
                     userQuizList.add(userQuiz);
+            }
+
+            db.close();
+            return userQuizList;
+        }
+        catch (Exception ex){
+            throw ex;
+        }
+    }
+
+    public ArrayList<UserQuiz> GetAllUserQuizDetails(){
+        try{
+            String query = "Select _userId, _questionId, _isAnswerCorrect FROM " + TABLE_USER_QUIZ;
+
+            SQLiteDatabase db = this.getWritableDatabase();
+            Cursor cursor = db.rawQuery(query, null);
+
+            ArrayList<UserQuiz> userQuizList = new ArrayList<>();
+            UserQuiz userQuiz;
+            while (cursor.moveToNext()) {
+                userQuiz = new UserQuiz();
+                userQuiz.setUserId(cursor.getString(0));
+                userQuiz.setQuestionId(cursor.getInt(1));
+                userQuiz.setIsCorrect(cursor.getString(2));
+                userQuizList.add(userQuiz);
             }
 
             db.close();
@@ -282,50 +351,76 @@ String CREATE_USER_QUIZ_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_USER_QUIZ 
         }
     }
 
+    public boolean CheckUserQuizByUserId(String userId){
+        try{
+            String query = "Select * FROM " + TABLE_USER_QUIZ + " WHERE " + USER_QUIZ_ID + " = '" + userId + "'";
 
-  /*  public User findUser(String emailid) {
-        String query = "Select * FROM " + TABLE_USERS + " WHERE " + USER_EMAIL_ID + " =  \"" + emailid+ "\"";
+            SQLiteDatabase db = this.getWritableDatabase();
 
-        SQLiteDatabase db = this.getWritableDatabase();
+            Cursor cursor = db.rawQuery(query, null);
 
-        Cursor cursor = db.rawQuery(query, null);
-        User user = new User();
-        if (cursor.moveToFirst()) {
-            cursor.moveToFirst();
-            user.setID(Integer.parseInt(cursor.getString(0)));
-            user.setFname(cursor.getString(1));
-            user.setLname(cursor.getString(2));
-            user.setEmailid(cursor.getString(3));
-            user.setPassword(cursor.getString(4));
+            if (cursor.moveToFirst()) {
+                cursor.moveToFirst();
+                cursor.close();
+                db.close();
 
-            cursor.close();
-        } else {
-            user = null;
+                return true;
+            } else {
+                return false;
+            }
         }
-        db.close();
-        return user;
+        catch (Exception ex){
+            throw ex;
+        }
     }
 
-    public boolean deleteUser(String emailid) {
+
+  public boolean deleteUserQuiz(String userId) {
 
         boolean result = false;
 
-        String query = "Select * FROM " + TABLE_USERS + " WHERE " + USER_EMAIL_ID + " =  \"" + emailid + "\"";
+        String query = "Select * FROM " + TABLE_USER_QUIZ + " WHERE " + USER_QUIZ_ID + " = '" + userId + "'";
 
         SQLiteDatabase db = this.getWritableDatabase();
 
         Cursor cursor = db.rawQuery(query, null);
 
-        User user = new User();
-
         if (cursor.moveToFirst()) {
-            user.setID(Integer.parseInt(cursor.getString(0)));
-            db.delete(TABLE_USERS, USER_ID + " = ?",
-                    new String[] { String.valueOf(user.getID()) });
+
+            db.delete(TABLE_USER_QUIZ, USER_QUIZ_ID + " = ?", new String[] { "'" + userId + "'" });
+
             cursor.close();
             result = true;
         }
         db.close();
         return result;
-    }*/
+    }
+
+    public boolean deleteUser(String userId) {
+        try {
+            if(CheckUserQuizByUserId(userId))
+                deleteUserQuiz(userId);
+
+            boolean result = false;
+
+            String query = "Select * FROM " + TABLE_USERS + " WHERE " + USER_EMAIL_ID + " = '" + userId + "'";
+
+            SQLiteDatabase db = this.getWritableDatabase();
+
+            Cursor cursor = db.rawQuery(query, null);
+
+            if (cursor.moveToFirst()) {
+
+                db.delete(TABLE_USERS, USER_EMAIL_ID + " = ?", new String[] { "'" + userId + "'" });
+
+                cursor.close();
+                result = true;
+            }
+            db.close();
+            return result;
+        }
+        catch (Exception ex){
+            throw ex;
+        }
+    }
 }

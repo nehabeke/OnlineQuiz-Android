@@ -12,7 +12,7 @@ import android.widget.Toast;
 public class MainActivity extends Activity {
 
     private static final int CH_REQUEST = 100; // request code
-    EditText PasswordEditText, userNameEditText;
+    EditText txtPassword, txtUserName;
     Button buttonLogin;
     TextView register;
 
@@ -22,8 +22,8 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        PasswordEditText = (EditText) findViewById(R.id.PasswordEditText);
-        userNameEditText = (EditText) findViewById(R.id.userNameEditText);
+        txtUserName = (EditText) findViewById(R.id.txtUserName);
+        txtPassword = (EditText) findViewById(R.id.txtPassword);
         buttonLogin = (Button) findViewById(R.id.buttonLogin);
         register = (TextView) findViewById(R.id.register);
 
@@ -31,36 +31,53 @@ public class MainActivity extends Activity {
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (userNameEditText.getText().toString().equals("a") &&
-                        PasswordEditText.getText().toString().equals("a")) {
-                    Intent myIntent = new Intent(MainActivity.this, Adminchoice.class);
-                    startActivity(myIntent);
+                try {
+                    if (txtUserName.getText().equals(null) || txtUserName.getText().toString().equals(""))
+                        Toast.makeText(getApplicationContext(), "Enter User Name", Toast.LENGTH_SHORT).show();
+                    else if (txtPassword.getText().equals(null) || txtPassword.getText().toString().equals(""))
+                        Toast.makeText(getApplicationContext(), "Enter Password", Toast.LENGTH_SHORT).show();
+                    else {
+                        if (txtUserName.getText().toString().equals("a") && txtPassword.getText().toString().equals("a")) {
+                            Intent intent = new Intent(MainActivity.this, Adminchoice.class);
+                            intent.putExtra("UserId", txtUserName.getText().toString().trim());
+                            if (txtUserName.getText().toString().equals("a") && txtPassword.getText().toString().equals("a"))
+                                intent.putExtra("IsAdmin","true");
+                            else
+                                intent.putExtra("IsAdmin", "false");
 
-                } else {
-                    boolean isValidUser = CheckIfValidUser();
+                            startActivity(intent);
 
-                    if (isValidUser) {
-                        Intent intent = new Intent(MainActivity.this, StudentDashboard.class);
-                        intent.putExtra("UserId", userNameEditText.getText().toString().trim());
-                        startActivityForResult(intent, CH_REQUEST);
-                        startActivity(intent);
-                    } else
-                        Toast.makeText(getApplicationContext(), "Invalid User!", Toast.LENGTH_SHORT).show();
+                        } else {
+                            boolean isValidUser = CheckIfValidUser();
 
+                            if (isValidUser) {
+                                Intent intent = new Intent(MainActivity.this, StudentDashboard.class);
+                                intent.putExtra("UserId", txtUserName.getText().toString().trim());
 
+                                if (txtUserName.getText().toString().equals("a") && txtPassword.getText().toString().equals("a"))
+                                    intent.putExtra("IsAdmin","true");
+                                else
+                                    intent.putExtra("IsAdmin", "false");
+
+                                startActivityForResult(intent, CH_REQUEST);
+                                startActivity(intent);
+                            } else
+                                Toast.makeText(getApplicationContext(), "Invalid User!", Toast.LENGTH_SHORT).show();
+                        }
+                    }
                 }
-//                else {
-//
-//                    Toast.makeText(getApplicationContext(), "Invalid User!",Toast.LENGTH_SHORT).show();
-//
-//                }
-
+                catch (Exception ex)
+                {
+                    Toast.makeText(getApplicationContext(), "Some error occurred! Please try again later.", Toast.LENGTH_SHORT).show();
+                }
             }
         });
+
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent myIntent = new Intent(MainActivity.this, addUserActivity.class);
+                myIntent.putExtra("IsAdmin", "false");
                 startActivity(myIntent);
 
             }
@@ -72,12 +89,7 @@ public class MainActivity extends Activity {
     public boolean CheckIfValidUser() {
         MyDBHandler dbHandler = new MyDBHandler(this, null, null, 1);
 
-        return dbHandler.CheckIfValidUser(userNameEditText.getText().toString(), PasswordEditText.getText().toString());
-
-//        if(isValidUser)
-//            Toast.makeText(getApplicationContext(), "Hi User",Toast.LENGTH_SHORT).show();
-//        else
-//            Toast.makeText(getApplicationContext(), "Invalid User!",Toast.LENGTH_SHORT).show();
+        return dbHandler.CheckIfValidUser(txtUserName.getText().toString(), txtPassword.getText().toString());
     }
 
 }

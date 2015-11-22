@@ -13,6 +13,9 @@ public class StudentDashboard extends Activity {
     private static final int CH_REQUEST = 100; // request code
     String userId;
     Button btnStartQuiz;
+    Button btnReport;
+    Button btnProfile;
+    String isAdmin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,13 +23,39 @@ public class StudentDashboard extends Activity {
         setContentView(R.layout.activity_student_dashboard);
 
         btnStartQuiz = (Button) findViewById(R.id.btnStartQuiz);
+        btnReport = (Button) findViewById(R.id.btnReport);
+        btnProfile = (Button) findViewById(R.id.btnProfile);
 
         btnStartQuiz.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Intent intent = new Intent(StudentDashboard.this, Quiz.class);
                 intent.putExtra("UserId", userId);
+                intent.putExtra("IsAdmin", isAdmin);
+                startActivityForResult(intent, CH_REQUEST);
+                startActivity(intent);
+
+            }
+        });
+
+        btnReport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(StudentDashboard.this, User_Score.class);
+                intent.putExtra("UserId", userId);
+                intent.putExtra("IsAdmin", isAdmin);
+                startActivityForResult(intent, CH_REQUEST);
+                startActivity(intent);
+
+            }
+        });
+
+        btnProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(StudentDashboard.this, addUserActivity.class);
+                intent.putExtra("UserId", userId);
+                intent.putExtra("IsAdmin", isAdmin);
                 startActivityForResult(intent, CH_REQUEST);
                 startActivity(intent);
 
@@ -62,7 +91,7 @@ public class StudentDashboard extends Activity {
         Intent intent = getIntent();
         if (intent != null) {
             userId = intent.getCharSequenceExtra("UserId").toString();
-            //Toast.makeText(getApplicationContext(), "UserId = " + userId, Toast.LENGTH_SHORT).show();
+            isAdmin = intent.getCharSequenceExtra("IsAdmin").toString();
         }
     }
 }

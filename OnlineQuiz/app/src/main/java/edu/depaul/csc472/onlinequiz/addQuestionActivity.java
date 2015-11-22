@@ -7,10 +7,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 public class addQuestionActivity extends Activity {
     EditText ETQuestion,optionA,optionB,optionC,optionD,Answer;
-    EditText Qno;
+    TextView Qno;
     Button buttonAdd;
 
 
@@ -24,25 +26,29 @@ public class addQuestionActivity extends Activity {
         optionC = (EditText) findViewById(R.id.optionC);
         optionD = (EditText) findViewById(R.id.optionD);
         Answer = (EditText) findViewById(R.id.Answer);
-        Qno=(EditText)findViewById(R.id.Qno);
+        Qno = (TextView)findViewById(R.id.Qno);
         buttonAdd = (Button) findViewById(R.id.buttonAdd);
     }
+
     public void newQuestion(View view) {
         MyDBHandler dbHandler = new MyDBHandler(this, null, null, 1);
 
-        int qid =  Integer.parseInt(Qno.getText().toString());
-        Question question=  new Question(qid,ETQuestion.getText().toString(),optionA.getText().toString(),optionB.getText().toString(),
+        int qid = 0;
+        if(Qno.getText() != null)
+            qid =  Integer.parseInt(Qno.getText().toString());
+
+        Question question=  new Question(qid, ETQuestion.getText().toString(),optionA.getText().toString(),optionB.getText().toString(),
                optionC.getText().toString(),optionD.getText().toString(),Integer.parseInt(Answer.getText().toString()) );
 
         dbHandler.addQuestion(question);
-        Qno.setText("");
-       ETQuestion.setText("");
-       optionA.setText("");
-       optionB.setText("");
-        optionC.setText("");
-        optionD.setText("");
-        Answer.setText("");
-
+//        Qno.setText("");
+//       ETQuestion.setText("");
+//       optionA.setText("");
+//       optionB.setText("");
+//        optionC.setText("");
+//        optionD.setText("");
+//        Answer.setText("");
+        Toast.makeText(getApplicationContext(), "Question Added Successfully.", Toast.LENGTH_SHORT).show();
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

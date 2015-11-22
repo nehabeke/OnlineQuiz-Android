@@ -2,16 +2,17 @@ package edu.depaul.csc472.onlinequiz;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 public class Adminchoice extends Activity {
- Button addUserButton,addQuestionButton;
+    String userId;
+    String isAdmin;
+    Button addUserButton,addQuestionButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,8 +25,9 @@ public class Adminchoice extends Activity {
         addUserButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent myIntent = new Intent(Adminchoice.this, addUserActivity.class);
-                startActivity(myIntent);
+                Intent intent = new Intent(Adminchoice.this, addUserActivity.class);
+                intent.putExtra("IsAdmin", isAdmin);
+                startActivity(intent);
 
             }
         });
@@ -33,12 +35,23 @@ public class Adminchoice extends Activity {
         addQuestionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent myIntent = new Intent(Adminchoice.this, addQuestionActivity.class);
-                startActivity(myIntent);
+                Intent intent = new Intent(Adminchoice.this, addQuestionActivity.class);
+                intent.putExtra("IsAdmin", isAdmin);
+                startActivity(intent);
 
             }
         });
     }
+
+//    @Override
+//    protected void onStart() {
+//        super.onStart();
+//        Intent intent = getIntent();
+//        if (intent != null) {
+//            userId = intent.getCharSequenceExtra("UserId").toString();
+//            isAdmin = intent.getCharSequenceExtra("IsAdmin").toString();
+//        }
+//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -17,6 +17,7 @@ public class Quiz extends Activity {
 
     private static final int CH_REQUEST = 100; // request code
     String userId;
+    String isAdmin;
     int questionId = 1;
     int prevQuestion = 0;
     int tempQuestionId = 0;
@@ -132,6 +133,7 @@ public class Quiz extends Activity {
         public void onClick(View v) {
             Intent intent = new Intent(Quiz.this, User_Score.class);
             intent.putExtra("UserId", userId);
+            intent.putExtra("IsAdmin", isAdmin);
             startActivityForResult(intent, CH_REQUEST);
             startActivity(intent);
         }
@@ -167,6 +169,7 @@ public class Quiz extends Activity {
         Intent intent = getIntent();
         if (intent != null) {
             userId = intent.getCharSequenceExtra("UserId").toString();
+            isAdmin = intent.getCharSequenceExtra("IsAdmin").toString();
             //Toast.makeText(getApplicationContext(), "UserId = " + userId, Toast.LENGTH_SHORT).show();
 
             Question question = GetQuestion(questionId);

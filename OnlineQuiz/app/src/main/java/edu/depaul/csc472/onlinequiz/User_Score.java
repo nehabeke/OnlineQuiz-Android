@@ -63,7 +63,7 @@ public class User_Score extends Activity {
                 }
 
                 int score = GetUserScore();
-                txtScore.setText(String.valueOf(score));
+                txtScore.setText(String.valueOf(score) + " / 5");
             }
         }
         catch (Exception ex){
@@ -78,12 +78,11 @@ public class User_Score extends Activity {
 
     public int GetUserScore() {
         MyDBHandler dbHandler = new MyDBHandler(this, null, null, 1);
-        ArrayList<UserQuiz> list = dbHandler.GetUserScore(userId);
+        ArrayList<UserQuiz> list = dbHandler.GetUserQuizByUserId(userId);
 
         int score = 0;
         for (int i = 0; i < list.size(); i++) {
-            String iscorrect = list.get(i).getIsAnswerCorrect();
-            if (iscorrect.equals("true")) {
+            if (list.get(i).getIsAnswerCorrect().equals("true")) {
                 score++;
             }
         }
