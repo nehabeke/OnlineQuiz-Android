@@ -40,11 +40,10 @@ public class addUserActivity extends Activity {
                 if (txtEmailId.getText() != null || txtEmailId.getText().toString() != "") {
                     if (DeleteUser()) {
                         Toast.makeText(getApplicationContext(), "User deleted successfully.", Toast.LENGTH_SHORT).show();
-                        txtFName.setText("");
-                        txtLName.setText("");
-                        txtEmailId.setText("");
-                        txtUserPassword.setText("");
-                        txtReenterPassword.setText("");
+                        Intent intent = new Intent(addUserActivity.this, Adminchoice.class);
+                        intent.putExtra("IsAdmin", isAdmin);
+
+                        startActivity(intent);
                     }
                     else
                         Toast.makeText(getApplicationContext(), "Error occurred while deleting user.", Toast.LENGTH_SHORT).show();
