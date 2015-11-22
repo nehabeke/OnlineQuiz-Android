@@ -83,8 +83,8 @@ public class addUserActivity extends Activity {
                     startActivity(intent);
                 }
                 else {
-                    Intent intent = new Intent(addUserActivity.this, Adminchoice.class);
-
+                    Intent intent = new Intent(addUserActivity.this, UserList.class);
+                    intent.putExtra("IsAdmin", isAdmin);
                     startActivityForResult(intent, CH_REQUEST);
                     startActivity(intent);
                 }
@@ -116,6 +116,17 @@ public class addUserActivity extends Activity {
                     btnDelete.setEnabled(false);
 
                 if(isAdmin.equals("false")){
+                    userId = intent.getCharSequenceExtra("UserId").toString();
+                    User objUser = GetUser();
+                    if(objUser != null) {
+                        txtFName.setText(objUser.getFname());
+                        txtLName.setText(objUser.getLname());
+                        txtEmailId.setText(objUser.getEmailid());
+                        txtUserPassword.setText(objUser.getPassword());
+                        txtReenterPassword.setText(objUser.getPassword());
+                    }
+                }
+                else if(intent.getCharSequenceExtra("UserId") != null){
                     userId = intent.getCharSequenceExtra("UserId").toString();
                     User objUser = GetUser();
                     if(objUser != null) {

@@ -12,6 +12,7 @@ public class Adminchoice extends Activity {
     String userId;
     String isAdmin;
     Button addUserButton,addQuestionButton;
+    Button btnUserList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,7 +20,8 @@ public class Adminchoice extends Activity {
         setContentView(R.layout.activity_adminchoice);
         addUserButton = (Button)findViewById(R.id.addUserButton);
 
-      addQuestionButton = (Button) findViewById(R.id.addQuestionButton);
+        addQuestionButton = (Button) findViewById(R.id.addQuestionButton);
+        btnUserList = (Button) findViewById(R.id.btnUserList);
 
 
         addUserButton.setOnClickListener(new View.OnClickListener() {
@@ -36,6 +38,16 @@ public class Adminchoice extends Activity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Adminchoice.this, addQuestionActivity.class);
+                intent.putExtra("IsAdmin", isAdmin);
+                startActivity(intent);
+
+            }
+        });
+
+        btnUserList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Adminchoice.this, UserList.class);
                 intent.putExtra("IsAdmin", isAdmin);
                 startActivity(intent);
 
@@ -73,5 +85,14 @@ public class Adminchoice extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Intent intent = getIntent();
+        if (intent != null) {
+            isAdmin = intent.getCharSequenceExtra("IsAdmin").toString();
+        }
     }
 }

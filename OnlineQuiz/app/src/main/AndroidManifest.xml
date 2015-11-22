@@ -62,6 +62,10 @@
             android:name=".StudentReportList"
             android:label="@string/title_activity_student_report_list" >
         </activity>
+        <activity
+            android:name=".UserList"
+            android:label="@string/title_activity_user_list" >
+        </activity>
     </application>
 
 </manifest>

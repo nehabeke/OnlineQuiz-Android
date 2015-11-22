@@ -263,6 +263,32 @@ String CREATE_USER_QUIZ_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_USER_QUIZ 
         }
     }
 
+    public ArrayList<User> GetAllUserList(){
+        try{
+            String query = "Select _fname, _lname, _emailid, _password FROM " + TABLE_USERS;
+
+            SQLiteDatabase db = this.getWritableDatabase();
+            Cursor cursor = db.rawQuery(query, null);
+
+            ArrayList<User> list = new ArrayList<>();
+            User objUser;
+            while (cursor.moveToNext()) {
+                objUser = new User();
+                objUser.setFname(cursor.getString(0));
+                objUser.setLname(cursor.getString(1));
+                objUser.setEmailid(cursor.getString(2));
+                objUser.setPassword(cursor.getString(3));
+                list.add(objUser);
+            }
+
+            db.close();
+            return list;
+        }
+        catch (Exception ex){
+            throw ex;
+        }
+    }
+
     public int GetUserScore(String userId) {
         ArrayList<UserQuiz> list = GetUserQuizByUserId(userId);
 
