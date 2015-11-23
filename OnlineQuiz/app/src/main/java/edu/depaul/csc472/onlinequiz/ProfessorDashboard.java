@@ -12,6 +12,7 @@ public class ProfessorDashboard extends Activity {
 
     private static final int CH_REQUEST = 100; // request code
     Button btnStudentReports;
+    Button btnQuestionList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,6 +20,7 @@ public class ProfessorDashboard extends Activity {
         setContentView(R.layout.activity_professor_dashboard);
 
         btnStudentReports = (Button) findViewById(R.id.btnStudentReports);
+        btnQuestionList = (Button) findViewById(R.id.btnQuestionList);
 
             btnStudentReports.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -27,6 +29,15 @@ public class ProfessorDashboard extends Activity {
                     startActivityForResult(intent, CH_REQUEST);
                     startActivity(intent);
                 }
+        });
+
+        btnQuestionList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ProfessorDashboard.this, QuestionList.class);
+                startActivity(intent);
+
+            }
         });
     }
 

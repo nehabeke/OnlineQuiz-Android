@@ -7,26 +7,29 @@
     tools:context="edu.depaul.csc472.onlinequiz.StudentDashboard">
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Start Quiz"
         android:id="@+id/btnStartQuiz"
         android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:textStyle="bold"/>
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Quiz Report"
         android:id="@+id/btnReport"
         android:layout_below="@+id/btnStartQuiz"
-        android:layout_alignEnd="@+id/btnProfile" />
+        android:layout_alignEnd="@+id/btnProfile"
+        android:textStyle="bold"/>
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Profile"
         android:id="@+id/btnProfile"
         android:layout_below="@+id/btnReport"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:textStyle="bold"/>
 </RelativeLayout>

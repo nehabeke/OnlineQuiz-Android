@@ -1,6 +1,7 @@
 package edu.depaul.csc472.onlinequiz;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -11,10 +12,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class addQuestionActivity extends Activity {
+
     EditText ETQuestion,optionA,optionB,optionC,optionD,Answer;
     TextView Qno;
     Button buttonAdd;
-
+    int questionId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +29,7 @@ public class addQuestionActivity extends Activity {
         optionD = (EditText) findViewById(R.id.optionD);
         Answer = (EditText) findViewById(R.id.Answer);
         Qno = (TextView)findViewById(R.id.Qno);
+        Qno.setText("");
         buttonAdd = (Button) findViewById(R.id.buttonAdd);
     }
 
@@ -34,21 +37,36 @@ public class addQuestionActivity extends Activity {
         MyDBHandler dbHandler = new MyDBHandler(this, null, null, 1);
 
         int qid = 0;
-        if(Qno.getText() != null)
-            qid =  Integer.parseInt(Qno.getText().toString());
 
-        Question question=  new Question(qid, ETQuestion.getText().toString(),optionA.getText().toString(),optionB.getText().toString(),
-               optionC.getText().toString(),optionD.getText().toString(),Integer.parseInt(Answer.getText().toString()) );
+        if(ETQuestion.getText().equals(null) || ETQuestion.getText().toString().equals(""))
+            Toast.makeText(getApplicationContext(), "Enter Question!", Toast.LENGTH_SHORT).show();
+        else if(optionA.getText().equals(null) || optionA.getText().toString().equals(""))
+            Toast.makeText(getApplicationContext(), "Enter option 1!", Toast.LENGTH_SHORT).show();
+        else if(optionB.getText().equals(null) || optionB.getText().toString().equals(""))
+            Toast.makeText(getApplicationContext(), "Enter option 2!", Toast.LENGTH_SHORT).show();
+        else if(optionC.getText().equals(null) || optionC.getText().toString().equals(""))
+            Toast.makeText(getApplicationContext(), "Enter option 3!", Toast.LENGTH_SHORT).show();
+        else if(optionD.getText().equals(null) || optionD.getText().toString().equals(""))
+            Toast.makeText(getApplicationContext(), "Enter option 4!", Toast.LENGTH_SHORT).show();
+        else if(Answer.getText().equals(null) || Answer.getText().toString().equals(""))
+            Toast.makeText(getApplicationContext(), "Enter Answer!", Toast.LENGTH_SHORT).show();
+        else {
+            if(Qno.getText().equals(null) || Qno.getText().toString().equals("")) {
+                //do nothing
+            }
+            else
+                qid =  Integer.parseInt(Qno.getText().toString());
 
-        dbHandler.addQuestion(question);
-//        Qno.setText("");
-//       ETQuestion.setText("");
-//       optionA.setText("");
-//       optionB.setText("");
-//        optionC.setText("");
-//        optionD.setText("");
-//        Answer.setText("");
-        Toast.makeText(getApplicationContext(), "Question Added Successfully.", Toast.LENGTH_SHORT).show();
+            Question question = new Question(qid, ETQuestion.getText().toString(), optionA.getText().toString(), optionB.getText().toString(),
+                    optionC.getText().toString(), optionD.getText().toString(), Integer.parseInt(Answer.getText().toString()));
+
+            dbHandler.addQuestion(question);
+
+            Toast.makeText(getApplicationContext(), "Question Added Successfully.", Toast.LENGTH_SHORT).show();
+
+            Intent intent = new Intent(addQuestionActivity.this, QuestionList.class);
+            startActivity(intent);
+        }
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -70,5 +88,37 @@ public class addQuestionActivity extends Activity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onStart() {
+        try {
+            super.onStart();
+            Intent intent = getIntent();
+            if (intent != null) {
+
+                questionId = intent.getIntExtra("QuestionId", 0);
+
+                Question objQuestion = GetQuestion();
+                if (objQuestion != null) {
+                    Qno.setText(String.valueOf(objQuestion.getID()));
+                    ETQuestion.setText(objQuestion.getQuestion());
+                    optionA.setText(objQuestion.getOp1());
+                    optionB.setText(objQuestion.getOp2());
+                    optionC.setText(objQuestion.getOp3());
+                    optionD.setText(objQuestion.getOp4());
+                    Answer.setText(String.valueOf(objQuestion.getAnswer()));
+                }
+
+            }
+        }catch (Exception ex){
+            throw ex;
+        }
+    }
+
+    public Question GetQuestion() {
+        MyDBHandler dbHandler = new MyDBHandler(this, null, null, 1);
+
+        return dbHandler.GetQuestion(questionId);
     }
 }

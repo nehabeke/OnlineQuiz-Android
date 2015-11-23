@@ -18,4 +18,5 @@
     <string name="title_activity_professor_dashboard">ProfessorDashboard</string>
     <string name="title_activity_student_report_list">StudentReportList</string>
     <string name="title_activity_user_list">UserList</string>
+    <string name="title_activity_question_list">QuestionList</string>
 </resources>

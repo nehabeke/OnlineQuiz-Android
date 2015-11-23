@@ -41,6 +41,7 @@ public class addUserActivity extends Activity {
                     if (DeleteUser()) {
                         Toast.makeText(getApplicationContext(), "User deleted successfully.", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(addUserActivity.this, Adminchoice.class);
+                        intent.putExtra("UserId", userId);
                         intent.putExtra("IsAdmin", isAdmin);
 
                         startActivity(intent);

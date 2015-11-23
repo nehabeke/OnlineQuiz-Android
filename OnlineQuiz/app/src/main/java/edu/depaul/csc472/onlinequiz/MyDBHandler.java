@@ -132,8 +132,8 @@
                     db.close();
                 } else {
                     //Add
-                    SQLiteDatabase db = this.getWritableDatabase();
                     values.put(QUESTION_ID, GetMaxQuestionId());
+                    SQLiteDatabase db = this.getWritableDatabase();
                     db.insert(TABLE_QUESTION, null, values);
                     db.close();
                 }
@@ -263,6 +263,35 @@
             }
         }
 
+        public ArrayList<Question> GetAllQuestionList(){
+            try{
+                String query = "Select _id, _question, _opt1, _opt2, _opt3, _opt4, _answer FROM " + TABLE_QUESTION;
+
+                SQLiteDatabase db = this.getWritableDatabase();
+                Cursor cursor = db.rawQuery(query, null);
+
+                ArrayList<Question> list = new ArrayList<>();
+                Question objQuestion;
+                while (cursor.moveToNext()) {
+                    objQuestion = new Question();
+                    objQuestion.setID(cursor.getInt(0));
+                    objQuestion.setQuestion(cursor.getString(1));
+                    objQuestion.setOp1(cursor.getString(2));
+                    objQuestion.setOp2(cursor.getString(3));
+                    objQuestion.setOp3(cursor.getString(4));
+                    objQuestion.setOp4(cursor.getString(5));
+                    objQuestion.setAnswer(cursor.getInt(6));
+                    list.add(objQuestion);
+                }
+
+                db.close();
+                return list;
+            }
+            catch (Exception ex){
+                throw ex;
+            }
+        }
+
         public ArrayList<User> GetAllUserList(){
             try{
                 String query = "Select _fname, _lname, _emailid, _password FROM " + TABLE_USERS;
@@ -360,10 +389,9 @@
         }
 
         public Question GetQuestion(int questionId){
+            SQLiteDatabase db = this.getWritableDatabase();
             try{
                 String query = "Select _id, _question, _opt1, _opt2, _opt3, _opt4, _answer FROM " + TABLE_QUESTION + " WHERE " + QUESTION_ID + " = " + questionId;
-
-                SQLiteDatabase db = this.getWritableDatabase();
 
                 Cursor cursor = db.rawQuery(query, null);
                 Question question = new Question();
@@ -377,7 +405,6 @@
                     question.setOp4(cursor.getString(5));
                     question.setAnswer(cursor.getInt(6));
                     cursor.close();
-                    db.close();
 
                     return question;
                 } else {
@@ -386,6 +413,9 @@
             }
             catch (Exception ex){
                 throw ex;
+            }
+            finally {
+                db.close();
             }
         }
 

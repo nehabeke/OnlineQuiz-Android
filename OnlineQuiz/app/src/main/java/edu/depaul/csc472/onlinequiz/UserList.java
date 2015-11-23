@@ -96,7 +96,6 @@ public class UserList extends ListActivity {
         intent.putExtra("IsAdmin", isAdmin);
         startActivityForResult(intent, CH_REQUEST);
         startActivity(intent);
-        startActivity(intent);
     }
 
     @Override

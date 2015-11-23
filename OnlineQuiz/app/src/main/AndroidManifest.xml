@@ -66,6 +66,10 @@
             android:name=".UserList"
             android:label="@string/title_activity_user_list" >
         </activity>
+        <activity
+            android:name=".QuestionList"
+            android:label="@string/title_activity_question_list" >
+        </activity>
     </application>
 
 </manifest>

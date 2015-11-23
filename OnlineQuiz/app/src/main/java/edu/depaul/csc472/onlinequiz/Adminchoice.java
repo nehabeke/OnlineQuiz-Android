@@ -14,6 +14,7 @@ public class Adminchoice extends Activity {
     Button addUserButton,addQuestionButton;
     Button btnUserList;
     Button btnStudentReports;
+    Button btnQuestionList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,13 +25,14 @@ public class Adminchoice extends Activity {
         addQuestionButton = (Button) findViewById(R.id.addQuestionButton);
         btnUserList = (Button) findViewById(R.id.btnUserList);
         btnStudentReports = (Button) findViewById(R.id.btnStudentReports);
+        btnQuestionList = (Button) findViewById(R.id.btnQuestionList);
 
 
         addUserButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Adminchoice.this, addUserActivity.class);
-                intent.putExtra("IsAdmin", isAdmin);
+                intent.putExtra("IsAdmin", "true");
                 startActivity(intent);
 
             }
@@ -40,7 +42,6 @@ public class Adminchoice extends Activity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Adminchoice.this, addQuestionActivity.class);
-                intent.putExtra("IsAdmin", isAdmin);
                 startActivity(intent);
 
             }
@@ -50,7 +51,7 @@ public class Adminchoice extends Activity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Adminchoice.this, UserList.class);
-                intent.putExtra("IsAdmin", isAdmin);
+                intent.putExtra("IsAdmin", "true");
                 startActivity(intent);
 
             }
@@ -62,6 +63,15 @@ public class Adminchoice extends Activity {
                 Intent intent = new Intent(Adminchoice.this, StudentReportList.class);
                 intent.putExtra("IsAdmin", "true");
                 startActivity(intent);
+            }
+        });
+
+        btnQuestionList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Adminchoice.this, QuestionList.class);
+                startActivity(intent);
+
             }
         });
     }
