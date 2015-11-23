@@ -42,6 +42,7 @@ public class Adminchoice extends Activity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Adminchoice.this, addQuestionActivity.class);
+                intent.putExtra("IsAdmin", "true");
                 startActivity(intent);
 
             }
@@ -70,6 +71,7 @@ public class Adminchoice extends Activity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Adminchoice.this, QuestionList.class);
+                intent.putExtra("IsAdmin", "true");
                 startActivity(intent);
 
             }
@@ -101,7 +103,13 @@ public class Adminchoice extends Activity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+//        if (id == R.id.action_settings) {
+//            return true;
+//        }
+
+        if (id == R.id.title_activity_mainactivity) {
+            Intent intent = new Intent(Adminchoice.this, MainActivity.class);
+            startActivity(intent);
             return true;
         }
 

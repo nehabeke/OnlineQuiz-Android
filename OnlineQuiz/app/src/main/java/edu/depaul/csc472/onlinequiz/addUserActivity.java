@@ -98,7 +98,7 @@ public class addUserActivity extends Activity {
     public boolean DeleteUser() {
         MyDBHandler dbHandler = new MyDBHandler(this, null, null, 1);
 
-        return dbHandler.deleteUser(txtEmailId.getText().toString());
+        return dbHandler.DeleteUser(txtEmailId.getText().toString());
     }
 
     @Override
@@ -106,9 +106,10 @@ public class addUserActivity extends Activity {
         super.onStart();
         Intent intent = getIntent();
         if (intent != null) {
-            if(intent.getCharSequenceExtra("UserId") != null){
 
-                isAdmin = intent.getCharSequenceExtra("IsAdmin").toString();
+            isAdmin = intent.getCharSequenceExtra("IsAdmin").toString();
+
+            if(intent.getCharSequenceExtra("UserId") != null){
 
                 if(isAdmin.equals("true"))
                     btnDelete.setEnabled(true);
@@ -162,9 +163,27 @@ public class addUserActivity extends Activity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.title_activity_mainactivity) {
+            Intent intent = new Intent(addUserActivity.this, MainActivity.class);
+            startActivity(intent);
             return true;
         }
+
+        if (id == R.id.title_activity_home) {
+            if(isAdmin.equals("false")) {
+                Intent intent = new Intent(addUserActivity.this, StudentDashboard.class);
+                intent.putExtra("UserId", userId);
+                intent.putExtra("IsAdmin", isAdmin);
+                startActivity(intent);
+            }
+            else{
+                Intent intent = new Intent(addUserActivity.this, Adminchoice.class);
+                intent.putExtra("IsAdmin", isAdmin);
+                startActivity(intent);
+            }
+            return true;
+        }
+
 
         return super.onOptionsItemSelected(item);
     }

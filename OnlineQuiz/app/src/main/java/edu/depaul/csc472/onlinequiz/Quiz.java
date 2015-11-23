@@ -133,6 +133,7 @@ public class Quiz extends Activity {
         public void onClick(View v) {
             Intent intent = new Intent(Quiz.this, User_Score.class);
             intent.putExtra("UserId", userId);
+            intent.putExtra("IsAdmin", isAdmin);
             startActivityForResult(intent, CH_REQUEST);
             startActivity(intent);
         }
@@ -155,8 +156,17 @@ public class Quiz extends Activity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.title_activity_mainactivity) {
+            Intent intent = new Intent(Quiz.this, MainActivity.class);
+            startActivity(intent);
             return true;
+        }
+
+        if (id == R.id.title_activity_home) {
+           Intent intent = new Intent(Quiz.this, StudentDashboard.class);
+           intent.putExtra("UserId", userId);
+           intent.putExtra("IsAdmin", isAdmin);
+           startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);

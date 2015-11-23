@@ -17,6 +17,8 @@ public class addQuestionActivity extends Activity {
     TextView Qno;
     Button buttonAdd;
     int questionId;
+    String isAdmin;
+    Button btnDeleteQuestion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +33,37 @@ public class addQuestionActivity extends Activity {
         Qno = (TextView)findViewById(R.id.Qno);
         Qno.setText("");
         buttonAdd = (Button) findViewById(R.id.buttonAdd);
+        btnDeleteQuestion = (Button) findViewById(R.id.btnDeleteQuestion);
+
+        btnDeleteQuestion.setEnabled(false);
+
+        btnDeleteQuestion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (DeleteQuestion()) {
+                        Toast.makeText(getApplicationContext(), "User deleted successfully.", Toast.LENGTH_SHORT).show();
+
+                        if(isAdmin.equals("true")) {
+                            Intent intent = new Intent(addQuestionActivity.this, Adminchoice.class);
+                            intent.putExtra("IsAdmin", isAdmin);
+                            startActivity(intent);
+                        }
+                        else{
+                            Intent intent = new Intent(addQuestionActivity.this, ProfessorDashboard.class);
+                            intent.putExtra("IsAdmin", isAdmin);
+                            startActivity(intent);
+                        }
+                    }
+                    else
+                        Toast.makeText(getApplicationContext(), "Error occurred while deleting question.", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public boolean DeleteQuestion() {
+        MyDBHandler dbHandler = new MyDBHandler(this, null, null, 1);
+
+        return dbHandler.DeleteQuestion(Integer.parseInt(Qno.getText().toString()));
     }
 
     public void newQuestion(View view) {
@@ -65,6 +98,7 @@ public class addQuestionActivity extends Activity {
             Toast.makeText(getApplicationContext(), "Question Added Successfully.", Toast.LENGTH_SHORT).show();
 
             Intent intent = new Intent(addQuestionActivity.this, QuestionList.class);
+            intent.putExtra("IsAdmin", isAdmin);
             startActivity(intent);
         }
     }
@@ -83,7 +117,23 @@ public class addQuestionActivity extends Activity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.title_activity_mainactivity) {
+            Intent intent = new Intent(addQuestionActivity.this, MainActivity.class);
+            startActivity(intent);
+            return true;
+        }
+
+        if (id == R.id.title_activity_home) {
+            if(isAdmin.equals("true")) {
+                Intent intent = new Intent(addQuestionActivity.this, Adminchoice.class);
+                intent.putExtra("IsAdmin", isAdmin);
+                startActivity(intent);
+            }
+            else{
+                Intent intent = new Intent(addQuestionActivity.this, ProfessorDashboard.class);
+                intent.putExtra("IsAdmin", isAdmin);
+                startActivity(intent);
+            }
             return true;
         }
 
@@ -96,7 +146,7 @@ public class addQuestionActivity extends Activity {
             super.onStart();
             Intent intent = getIntent();
             if (intent != null) {
-
+                isAdmin = intent.getCharSequenceExtra("IsAdmin").toString();
                 questionId = intent.getIntExtra("QuestionId", 0);
 
                 Question objQuestion = GetQuestion();
@@ -111,6 +161,12 @@ public class addQuestionActivity extends Activity {
                 }
 
             }
+
+            if(Qno.getText().equals(null) || Qno.getText().toString().equals(""))
+                btnDeleteQuestion.setEnabled(false);
+            else
+                btnDeleteQuestion.setEnabled(true);
+
         }catch (Exception ex){
             throw ex;
         }

@@ -113,7 +113,18 @@ public class UserList extends ListActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.title_activity_mainactivity) {
+            Intent intent = new Intent(UserList.this, MainActivity.class);
+            startActivity(intent);
+            return true;
+        }
+
+        if (id == R.id.title_activity_home) {
+            if(isAdmin.equals("true")) {
+                Intent intent = new Intent(UserList.this, Adminchoice.class);
+                intent.putExtra("IsAdmin", isAdmin);
+                startActivity(intent);
+            }
             return true;
         }
 

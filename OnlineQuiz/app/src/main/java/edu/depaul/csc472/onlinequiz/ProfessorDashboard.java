@@ -13,6 +13,7 @@ public class ProfessorDashboard extends Activity {
     private static final int CH_REQUEST = 100; // request code
     Button btnStudentReports;
     Button btnQuestionList;
+    Button btnProfessorQuestionList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,20 +22,32 @@ public class ProfessorDashboard extends Activity {
 
         btnStudentReports = (Button) findViewById(R.id.btnStudentReports);
         btnQuestionList = (Button) findViewById(R.id.btnQuestionList);
+        btnProfessorQuestionList = (Button) findViewById(R.id.btnProfessorQuestionList);
 
-            btnStudentReports.setOnClickListener(new View.OnClickListener() {
+        btnStudentReports.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(ProfessorDashboard.this, StudentReportList.class);
-                    startActivityForResult(intent, CH_REQUEST);
+                    intent.putExtra("IsAdmin", "professor");
                     startActivity(intent);
                 }
+        });
+
+        btnProfessorQuestionList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ProfessorDashboard.this, addQuestionActivity.class);
+                intent.putExtra("IsAdmin", "professor");
+                startActivity(intent);
+
+            }
         });
 
         btnQuestionList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ProfessorDashboard.this, QuestionList.class);
+                intent.putExtra("IsAdmin", "professor");
                 startActivity(intent);
 
             }
@@ -57,9 +70,12 @@ public class ProfessorDashboard extends Activity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.title_activity_mainactivity) {
+            Intent intent = new Intent(ProfessorDashboard.this, MainActivity.class);
+            startActivity(intent);
             return true;
         }
+
 
         return super.onOptionsItemSelected(item);
     }

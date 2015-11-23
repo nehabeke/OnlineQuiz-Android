@@ -20,6 +20,7 @@ public class QuestionList extends ListActivity {
 
     ArrayList<Question> list = new ArrayList<>();
     private static final String TAG = "QuestionList";
+    String isAdmin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,6 +98,7 @@ public class QuestionList extends ListActivity {
         Log.d(TAG, "onListItemClick position=" + position + " id=" + id + " " + list.get(position).getID());
         Intent intent = new Intent(QuestionList.this, addQuestionActivity.class);
         intent.putExtra("QuestionId", list.get(position).getID());
+        intent.putExtra("IsAdmin", isAdmin);
         startActivity(intent);
     }
 
@@ -115,10 +117,36 @@ public class QuestionList extends ListActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.title_activity_mainactivity) {
+            Intent intent = new Intent(QuestionList.this, MainActivity.class);
+            startActivity(intent);
+            return true;
+        }
+
+        if (id == R.id.title_activity_home) {
+            if(isAdmin.equals("true")) {
+                Intent intent = new Intent(QuestionList.this, Adminchoice.class);
+                intent.putExtra("IsAdmin", isAdmin);
+                startActivity(intent);
+            }
+            else{
+                Intent intent = new Intent(QuestionList.this, ProfessorDashboard.class);
+                intent.putExtra("IsAdmin", isAdmin);
+                startActivity(intent);
+            }
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Intent intent = getIntent();
+        if (intent != null) {
+
+            isAdmin = intent.getCharSequenceExtra("IsAdmin").toString();
+        }
     }
 }

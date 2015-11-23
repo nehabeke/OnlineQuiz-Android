@@ -442,11 +442,9 @@
             }
         }
 
-        public boolean deleteUser(String userId) {
+        public boolean DeleteUser(String userId) {
             try {
-                String query = "";
                 SQLiteDatabase db;
-                Cursor cursor;
 
                 if(CheckUserQuizByUserId(userId)) {
                     db = this.getWritableDatabase();
@@ -454,10 +452,23 @@
                     db.close();
                 }
 
-
-
                 db = this.getWritableDatabase();
                 db.execSQL("DELETE FROM " + TABLE_USERS + " WHERE " + USER_EMAIL_ID + "='" + userId + "'");
+                db.close();
+
+                return true;
+            }
+            catch (Exception ex){
+                throw ex;
+            }
+        }
+
+        public boolean DeleteQuestion(int questionId) {
+            try {
+                SQLiteDatabase db;
+
+                db = this.getWritableDatabase();
+                db.execSQL("DELETE FROM " + TABLE_QUESTION + " WHERE " + QUESTION_ID + " = " + questionId);
                 db.close();
 
                 return true;

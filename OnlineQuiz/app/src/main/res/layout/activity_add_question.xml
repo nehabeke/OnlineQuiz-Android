@@ -82,7 +82,7 @@
         android:layout_below="@+id/optionB"
         android:layout_alignStart="@+id/optionB"
         android:imeOptions="actionNext"
-        android:layout_alignEnd="@+id/buttonAdd" />
+        android:layout_alignEnd="@+id/optionB" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -118,9 +118,9 @@
         android:layout_height="wrap_content"
         android:text="Save"
         android:id="@+id/buttonAdd"
-        android:layout_alignParentTop="true"
-        android:layout_alignEnd="@+id/ETQuestion"
-        android:onClick="newQuestion" />
+        android:onClick="newQuestion"
+        android:layout_alignParentBottom="true"
+        android:layout_toEndOf="@+id/textView2" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -136,5 +136,14 @@
         android:id="@+id/Qno"
         android:layout_below="@+id/ETQuestion"
         android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Delete"
+        android:id="@+id/btnDeleteQuestion"
+        android:onClick="newQuestion"
+        android:layout_alignParentBottom="true"
+        android:layout_toEndOf="@+id/buttonAdd" />
 
 </RelativeLayout>

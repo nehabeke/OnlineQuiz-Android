@@ -15,6 +15,7 @@ public class User_Score extends Activity {
     TextView txtScore;
     TextView txtFName;
     TextView txtLName;
+    String isAdmin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,10 +42,33 @@ public class User_Score extends Activity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.title_activity_mainactivity) {
+            Intent intent = new Intent(User_Score.this, MainActivity.class);
+            startActivity(intent);
             return true;
         }
 
+        if (id == R.id.title_activity_home) {
+            if(isAdmin.equals("false")) {
+                Intent intent = new Intent(User_Score.this, StudentDashboard.class);
+                intent.putExtra("UserId", userId);
+                intent.putExtra("IsAdmin", isAdmin);
+                startActivity(intent);
+            }
+            else if(isAdmin.equals("professor")) {
+                Intent intent = new Intent(User_Score.this, ProfessorDashboard.class);
+                intent.putExtra("UserId", userId);
+                intent.putExtra("IsAdmin", isAdmin);
+                startActivity(intent);
+            }
+            else{
+                Intent intent = new Intent(User_Score.this, Adminchoice.class);
+                intent.putExtra("UserId", userId);
+                intent.putExtra("IsAdmin", isAdmin);
+                startActivity(intent);
+            }
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -55,7 +79,7 @@ public class User_Score extends Activity {
             Intent intent = getIntent();
             if (intent != null) {
                 userId = intent.getCharSequenceExtra("UserId").toString();
-
+                isAdmin = intent.getCharSequenceExtra("IsAdmin").toString();
                 User user = GetUser();
                 if(user != null) {
                     txtFName.setText(user.getFname());
