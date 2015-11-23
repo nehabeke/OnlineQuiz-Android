@@ -20,6 +20,7 @@ public class addUserActivity extends Activity {
     EditText txtUserPassword;
     EditText txtReenterPassword;
     Button btnDelete;
+    String newUser = "true";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +73,7 @@ public class addUserActivity extends Activity {
                 User user = new User(txtFName.getText().toString().trim(), txtLName.getText().toString().trim(), txtEmailId.getText().toString().trim(), txtUserPassword.getText().toString().trim());
 
                 dbHandler.addUser(user);
+
                 Toast.makeText(getApplicationContext(), "User Saved Successfully.", Toast.LENGTH_SHORT).show();
 
                 if(isAdmin.equals("false")) {
@@ -85,6 +87,9 @@ public class addUserActivity extends Activity {
                 else {
                     Intent intent = new Intent(addUserActivity.this, UserList.class);
                     intent.putExtra("IsAdmin", isAdmin);
+                    intent.putExtra("UserId", txtEmailId.getText());
+                    intent.putExtra("Password", txtUserPassword.getText());
+                    intent.putExtra("NewUser", newUser);
                     startActivityForResult(intent, CH_REQUEST);
                     startActivity(intent);
                 }
@@ -125,6 +130,7 @@ public class addUserActivity extends Activity {
                         txtEmailId.setText(objUser.getEmailid());
                         txtUserPassword.setText(objUser.getPassword());
                         txtReenterPassword.setText(objUser.getPassword());
+                        newUser = "false";
                     }
                 }
                 else if(intent.getCharSequenceExtra("UserId") != null){
@@ -136,6 +142,7 @@ public class addUserActivity extends Activity {
                         txtEmailId.setText(objUser.getEmailid());
                         txtUserPassword.setText(objUser.getPassword());
                         txtReenterPassword.setText(objUser.getPassword());
+                        newUser = "false";
                     }
                 }
             }

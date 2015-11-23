@@ -137,6 +137,35 @@ public class UserList extends ListActivity {
         Intent intent = getIntent();
         if (intent != null) {
              isAdmin = intent.getCharSequenceExtra("IsAdmin").toString();
+
+            if(intent.getCharSequenceExtra("Password") != null){
+                String password = intent.getCharSequenceExtra("Password").toString();
+                String userId = intent.getCharSequenceExtra("UserId").toString();
+                String newUser = intent.getCharSequenceExtra("NewUser").toString();
+
+                if(newUser.equals("true"))
+                    sendEmail(userId, password);
+            }
+        }
+    }
+
+    protected void sendEmail(String userId, String password) {
+        try {
+            String to = userId;
+            String subject = "Online Aptitude Test App Registration";
+            String message = "Your User Name: " + userId + " Your Password: " + password;
+
+            Intent email = new Intent(Intent.ACTION_SEND);
+            email.putExtra(Intent.EXTRA_EMAIL, new String[]{to});
+            email.putExtra(Intent.EXTRA_SUBJECT, subject);
+            email.putExtra(Intent.EXTRA_TEXT, message);
+
+            // need this to prompts email client only
+            email.setType("message/rfc822");
+
+            startActivity(Intent.createChooser(email, "Send mail..."));
+        }catch (Exception ex){
+            throw ex;
         }
     }
 }
