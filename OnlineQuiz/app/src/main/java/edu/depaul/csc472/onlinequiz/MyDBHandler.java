@@ -412,51 +412,7 @@
             }
         }
 
-//        public boolean deleteUser(String userId) {
-//            try {
-//                String query = "";
-//                SQLiteDatabase db;
-//                Cursor cursor;
-//                boolean result = false;
-//
-//                if(CheckUserQuizByUserId(userId))
-//                {
-//                    db = this.getWritableDatabase();
-//                    query = "Select * FROM " + TABLE_USER_QUIZ + " WHERE " + USER_QUIZ_ID + " = '" + userId + "'";
-//
-//                    cursor = db.rawQuery(query, null);
-//
-//                    if (cursor.moveToFirst()) {
-//
-//                        db.delete(TABLE_USER_QUIZ, USER_QUIZ_ID + " = ?", new String[] { "'" + userId + "'" });
-//
-//                        cursor.close();
-//                        result = true;
-//                        db.close();
-//                    }
-//                }
-//
-//                result = false;
-//
-//                query = "Select * FROM " + TABLE_USERS + " WHERE " + USER_EMAIL_ID + " = '" + userId + "'";
-//                db = this.getWritableDatabase();
-//               cursor = db.rawQuery(query, null);
-//
-//                if (cursor.moveToFirst()) {
-//                    db.delete(TABLE_USERS, USER_EMAIL_ID + " = ?", new String[] { "'" + userId + "'" });
-//
-//                    cursor.close();
-//                    result = true;
-//                    db.close();
-//                }
-//
-//                return result;
-//            }
-//            catch (Exception ex){
-//                throw ex;
-//            }
-//        }
-    public boolean deleteUser(String userId) {
+        public boolean deleteUser(String userId) {
             try {
                 String query = "";
                 SQLiteDatabase db;
